@@ -92,9 +92,6 @@ urlpatterns = [
 ```
 ## How to use Yarn
 
-> Make sure that you haved install Node.js
- Link: https://nodejs.org/en
-
 Step 1 -> Enter Docker container: 
 
 ```shell
@@ -104,7 +101,7 @@ docker-compose exec django bash
 Step 2 -> build dev:
 
 ```shell
-cd UI project path -> agency
+cd UI project path -> giraffe
 yarn install
 
 yarn run dev
