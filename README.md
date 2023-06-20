@@ -90,3 +90,26 @@ urlpatterns = [
     path('', views.ビューの関数, name='URLパスの名前'),
 ]
 ```
+## How to use Yarn
+
+> Make sure that you haved install Node.js
+ Link: https://nodejs.org/en
+
+Step 1 -> install Yarn: 
+
+```shell
+npm install -g yarn
+```
+
+Step 2 -> build dev:
+
+```shell
+cd project path -> pois-2nd-project/agency-master/
+yarn install
+
+yarn run dev
+
+```
+access localhost:3000
+
+then you can enter the homepages
