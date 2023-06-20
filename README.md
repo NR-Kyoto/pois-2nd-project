@@ -95,21 +95,21 @@ urlpatterns = [
 > Make sure that you haved install Node.js
  Link: https://nodejs.org/en
 
-Step 1 -> install Yarn: 
+Step 1 -> Enter Docker container: 
 
 ```shell
-npm install -g yarn
+docker-compose exec django bash
 ```
 
 Step 2 -> build dev:
 
 ```shell
-cd project path -> pois-2nd-project/agency-master/
+cd UI project path -> agency
 yarn install
 
 yarn run dev
-
 ```
+
 access localhost:3000
 
 then you can enter the homepages
