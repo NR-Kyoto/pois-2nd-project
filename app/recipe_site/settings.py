@@ -50,6 +50,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # ログインしていない状態でのアクセスを防止
+    'recipe_site.middleware.auth.AuthMiddleware',
 ]
 
 ROOT_URLCONF = 'recipe_site.urls'
