@@ -14,25 +14,26 @@ class Dish(models.Model):
 
 class Menu(models.Model):
     menu_id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(
+    user = models.ForeignKey(
             get_user_model(),
             on_delete=models.DO_NOTHING, # userの削除時、何もしない
         )
     date = models.DateField(auto_now=True) # デフォルトは現在の時刻を設定
     
 class MenuDetail(models.Model):
-    menu_id = models.ForeignKey(
+    menu = models.ForeignKey(
             Menu,
             on_delete=models.CASCADE,
         )
-    dish_id = models.ForeignKey(
+    dish = models.ForeignKey(
             Dish,
             on_delete=models.CASCADE,
+            default=0
         )
 
 # 調理器具名は https://english.sps10.com/4956/ を参照
 class CookingTool(models.Model):
-    username = models.ForeignKey(
+    user = models.OneToOneField(
             get_user_model(),
             on_delete=models.CASCADE,
         )
