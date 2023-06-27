@@ -39,7 +39,7 @@
     <v-app-bar
         :clipped-left="$vuetify.breakpoint.lgAndUp"
         app
-        color="white"
+        color="#B01616"
         elevate-on-scroll
         flat
     >
@@ -60,8 +60,8 @@
                 @click="$router.push('/')"
             >
               <v-icon color="primary" large>mdi-feather</v-icon>
-              Hero
-              <span class="accent--text">UI</span>
+              Pois
+              <span class="accent--text">Potrol</span>
             </v-toolbar-title>
           </v-col>
 
@@ -106,11 +106,11 @@ export default {
     drawer: null,
     btnItems: [
       {
-        text: "Free Download",
-        href: "https://github.com/AGDholo/giraffe",
+        text: "Login",
+        to: "/login",
         target: "_black",
         color: "primary",
-        icon: "mdi-download",
+        icon: "mdi-login",
       },
     ],
     barItems: [
@@ -129,11 +129,7 @@ export default {
       {
         title: "Authors",
         to: "/authors",
-      },
-      {
-        title: "Login",
-        to: "/login",
-      },
+      }
     ],
   }),
 };

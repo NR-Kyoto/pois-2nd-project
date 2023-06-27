@@ -1381,6 +1381,11 @@ vite@^2.7.13:
   optionalDependencies:
     fsevents "~2.3.2"
 
+vue-bot-ui@^0.2.8:
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/vue-bot-ui/-/vue-bot-ui-0.2.8.tgz#833e2f41b56726f7cfc7e7d6da2cf961cb910a2a"
+  integrity sha512-xT01ZMIkaEItrbrHztTkIphjiEK3qbhZIcXYgIP5+FSxJo3/w4a/dMfaYlu7YE9PMLJX2U1WmD776m26S4SjHQ==
+
 vue-router@^3.2.0:
   version "3.6.5"
   resolved "https://registry.npmjs.org/vue-router/-/vue-router-3.6.5.tgz"

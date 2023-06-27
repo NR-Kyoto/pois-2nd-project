@@ -5,11 +5,13 @@
         <v-row align="start">
           <v-col cols="12" md="3">
             <h4 class="text-h5 font-weight-bold">
-              Giraffe
+              Pois
             </h4>
             <p class="text-body-1">
-              Create, prototype, collaborate and turn your ideas into incredible
-              products with the definitive platform for digital design.
+              献立のレシピを自動生成するアプリケーション
+            </p>
+            <p class="text-body-1">
+              食べたいものを作って食べて健康に
             </p>
           </v-col>
 
@@ -18,7 +20,7 @@
               <v-subheader class="text-h6">HeroUI</v-subheader>
               <v-list-item-group color="primary">
                 <v-list-item
-                    v-for="(item, i) in heroui"
+                    v-for="(item, i) in Pois"
                     :key="i"
                     :href="item.href"
                     dense
@@ -37,7 +39,7 @@
 
           <v-col cols="12" md="3">
             <v-list color="transparent" flat>
-              <v-subheader class="text-h6">Giraffe</v-subheader>
+              <v-subheader class="text-h6">Pois</v-subheader>
               <v-list-item-group color="primary">
                 <v-list-item
                     v-for="(item, i) in shock"
@@ -91,10 +93,10 @@
           Copyright &copy;
           <a
               class="white--text"
-              href="https://heroui.net"
+              href="https://www.soc.i.kyoto-u.ac.jp/"
               rel="noopener noreferrer"
               target="_blank"
-          >HreoUI</a
+          >Kyoto Universsity Social informatics</a
           >
           {{ new Date().getFullYear() }}. All rights reserved.
         </div>
@@ -106,10 +108,10 @@
 <script>
 export default {
   data: () => ({
-    heroui: [
+    Pois: [
       {
-        text: "Github",
-        href: "https://github.com/AGDholo",
+        text: "Github Doc.",
+        href: "https://github.com/NR-Kyoto/pois-2nd-project",
       },
       {
         text: "Themes",
@@ -119,15 +121,15 @@ export default {
     shock: [
       {
         text: "Download",
-        href: "https://github.com/AGDholo/giraffe",
+        href: "https://github.com/NR-Kyoto/pois-2nd-project",
       },
       {
         text: "Issues",
-        href: "https://github.com/AGDholo/giraffe/issues",
+        href: "https://github.com/NR-Kyoto/pois-2nd-project/issues",
       },
       {
         text: "LICENSE",
-        href: "https://github.com/AGDholo/giraffe/blob/master/LICENSE",
+        href: "https://github.com/NR-Kyoto/pois-2nd-project/",
       },
     ],
   }),

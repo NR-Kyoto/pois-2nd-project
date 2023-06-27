@@ -12,7 +12,7 @@
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
               <v-col>
-                <v-btn color="accent" to="category">Travel</v-btn>
+                <v-btn color="secondary" to="category">Travel</v-btn>
               </v-col>
               <v-col cols="12" lg="8" md="10" xl="7">
                 <h2 class="text-h3 py-3" style="line-height: 1.2">
@@ -20,7 +20,7 @@
                 </h2>
               </v-col>
               <v-col class="d-flex align-center">
-                <v-avatar class="elevation-4" color="accent">
+                <v-avatar class="elevation-4" color="secondary">
                   <v-icon large>mdi-feather</v-icon>
                 </v-avatar>
 
@@ -62,7 +62,7 @@
                           style="border-radius: 16px"
                       >
                         <v-card-text>
-                          <v-btn color="accent" to="category">TIPS</v-btn>
+                          <v-btn color="secondary" to="category">TIPS</v-btn>
                         </v-card-text>
                       </v-img>
 
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <v-avatar color="accent" size="36">
+                          <v-avatar color="secondary" size="36">
                             <v-icon dark>mdi-feather</v-icon>
                           </v-avatar>
 
@@ -91,7 +91,7 @@
             </v-row>
           </div>
 
-          <div class="pt-16">
+          <!-- <div class="pt-16">
             <h2 class="text-h4 font-weight-bold pb-4">Featured</h2>
 
             <v-row>
@@ -108,7 +108,7 @@
                         class="d-flex flex-column justify-space-between fill-height"
                     >
                       <v-card-text>
-                        <v-btn color="accent">ANIMALS</v-btn>
+                        <v-btn color="secondary">ANIMALS</v-btn>
                       </v-card-text>
 
                       <v-card-text>
@@ -120,7 +120,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <v-avatar color="accent" size="36">
+                          <v-avatar color="secondary" size="36">
                             <v-icon dark>mdi-feather</v-icon>
                           </v-avatar>
 
@@ -132,9 +132,9 @@
                 </v-card>
               </v-col>
             </v-row>
-          </div>
+          </div> -->
 
-          <div class="pt-16">
+          <!-- <div class="pt-16">
             <h2 class="text-h4 font-weight-bold">Latest Posts</h2>
 
             <div>
@@ -151,7 +151,7 @@
 
                 <v-col>
                   <div>
-                    <v-btn color="accent" depressed>TRAVEL</v-btn>
+                    <v-btn color="secondary" depressed>TRAVEL</v-btn>
 
                     <h3 class="text-h4 font-weight-bold pt-3">
                       Ut enim blandit volutpat maecenas volutpat blandit
@@ -165,7 +165,7 @@
                     </p>
 
                     <div class="d-flex align-center">
-                      <v-avatar color="accent" size="36">
+                      <v-avatar color="secondary" size="36">
                         <v-icon dark>mdi-feather</v-icon>
                       </v-avatar>
 
@@ -175,15 +175,15 @@
                 </v-col>
               </v-row>
             </div>
-          </div>
+          </div> -->
         </div>
       </v-col>
 
-      <v-col>
+      <!-- <v-col>
         <div class="pt-16">
           <siderbar/>
         </div>
-      </v-col>
+      </v-col> -->
     </v-row>
   </div>
 </template>
@@ -191,8 +191,8 @@
 <script>
 export default {
   name: "Home",
-  components: {
-    siderbar: () => import("@/components/details/sidebar"),
-  },
+  // components: {
+  //   siderbar: () => import("@/components/details/sidebar"),
+  // },
 };
 </script>

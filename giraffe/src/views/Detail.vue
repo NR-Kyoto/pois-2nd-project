@@ -259,8 +259,5 @@
 <script>
 export default {
   name: "Category",
-  components: {
-    siderbar: () => import("@/components/details/sidebar")
-  }
 };
 </script>
