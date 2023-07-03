@@ -8,8 +8,14 @@ services:
     tty: true
     volumes:
       - ./app:/root/app
-      - ./giraffe:/root/giraffe
-      - ./agency:/root/agency
     ports:
       - "8000:8000"
-      - "3000:3000"
+  vue:
+    build: .
+    container_name: 'vue'
+    working_dir: '/root/'
+    tty: true
+    volumes:
+      - ./templates:/root/app/templates
+    ports:
+      - '3000:3000'
