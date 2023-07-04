@@ -1,5 +1,5 @@
 ###### Requirements without Version Specifiers ######
-
+networkx
 
 ###### Requirements with Version Specifiers ######`
 django==4.2

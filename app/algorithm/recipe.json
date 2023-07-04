@@ -1,0 +1,114 @@
+{
+    "Hamburger": [
+        {
+            "id": "hamburger1",
+            "ingredient": "vegetable",
+            "method": "cut",
+            "time": 60,
+            "condition": null,
+            "previous": null,
+            "text": "玉ねぎをみじん切りにします。"
+        },
+        {
+            "id": "hamburger2",
+            "ingredient": "vegetable",
+            "method": "stir",
+            "time": 540,
+            "condition": ["hamburger1"],
+            "previous": null,
+            "text": "フライパンにサラダ油大さじ1を入れて強めの中火で熱し、玉ねぎを加えます。軽く色づいてきたら、弱めの中火に火加減を落とし、合計8〜9分ほどじっくり炒めて甘みを引き出しましょう。"
+        },
+        {
+            "id": "hamburger3",
+            "ingredient": "vegetable",
+            "method": "other",
+            "time": 300,
+            "condition": ["hamburger2"],
+            "previous": "hamburger2",
+            "text": "玉ねぎの粗熱をとります。"
+        },
+        {
+            "id": "hamburger4",
+            "ingredient": "meat",
+            "method": "mix",
+            "time": 120,
+            "condition": ["hamburger3"],
+            "previous": null,
+            "text": "ひき肉と冷ました玉ねぎ、Aの材料（パン粉大さじ4、牛乳大さじ4～5、塩と砂糖各小さじ1/2、おろしにんにく1/2片分、コショウ少々）をボウルに入れます。"
+        },
+        {
+            "id": "hamburger5",
+            "ingredient": "meat",
+            "method": "mix",
+            "time": 180,
+            "condition": ["hamburger4"],
+            "previous": "hamburger4",
+            "text": "手でしっかり材料を練り混ぜ、ハンバーグのタネを作ります。"
+        },
+        {
+            "id": "hamburger6",
+            "ingredient": "meat",
+            "method": "other",
+            "time": 300,
+            "condition": ["hamburger5"],
+            "previous": "hamburger5",
+            "text": "作る個数にざっくりとボウルの中で切り分け、手に取って成形していきます。"
+        },
+        {
+            "id": "hamburger7",
+            "ingredient": "meat",
+            "method": "stir",
+            "time": 600,
+            "condition": ["hamburger6"],
+            "previous": null,
+            "text": "まず片面に焼き色を付けた後、火加減は弱火を少し強くしたくらいにして2〜3分ほど焼きます。裏返したら弱火にして、蓋をして7〜9分ほどじっくり蒸し焼きにします。"
+        },
+        {
+            "id": "hamburger8",
+            "ingredient": "seasoning",
+            "method": "stir",
+            "time": 180,
+            "condition": null,
+            "previous": null,
+            "text": "フライパンにBの調味料（ケチャップ大さじ3、ウスターソース大さじ1と1/2、醤油大さじ1）をすべて合わせ、フライパンを火にかけ、混ぜながら軽く煮詰めてソースを作ります。"
+        }
+    ],
+    "ConsommeSoup": [
+        {
+            "id": "soup1",
+            "ingredient": "vegetable",
+            "method": "cut",
+            "time": 300,
+            "condition": null,
+            "previous": null,
+            "text": "キャベツは葉をひと口大にちぎり、芯は薄切りにします。じゃがいもはひと口大に切ります。にんじんは乱切りにします。玉ねぎは薄切りにします。"
+        },
+        {
+            "id": "soup2",
+            "ingredient": "meat",
+            "method": "cut",
+            "time": 60,
+            "condition": null,
+            "previous": null,
+            "text": "ソーセージは長さを４等分に切ります。"
+        },
+        {
+            "id": "soup3",
+            "ingredient": "vegetable",
+            "method": "stew",
+            "time": 480,
+            "condition": ["soup1", "soup2"],
+            "previous": null,
+            "text": "鍋に水４カップとコンソメ２個、じゃがいも・にんじん・玉ねぎを入れて火にかけ、フタをして７～８分ほど煮ます。"
+        },
+        {
+            "id": "soup4",
+            "ingredient": "meat",
+            "method": "stew",
+            "time": 480,
+            "condition": ["soup3"],
+            "previous": "soup3",
+            "text": "キャベツ・ソーセージを加え、７～８分煮て、塩・こしょうで味を調えます。"
+        }
+    ]
+}
