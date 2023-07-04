@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('login/', include('login.urls')),
     # path('recommend/', include('recommend.urls')),
-    # path('recipe/', include('recipe.urls')),
+    path('recipe/', include('recipe.urls')),
 ]
