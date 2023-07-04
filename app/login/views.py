@@ -1,36 +1,35 @@
-from .forms import SignupForm, LoginForm
-from django.contrib.auth import login
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import TemplateView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import UserSerializer
 
-class MySignupView(CreateView):
-    template_name = 'login/signup.html'
-    form_class = SignupForm
-    success_url = '/auth/user'
-    
-    def form_valid(self, form):
+User = get_user_model()
 
-        # 妥当性の判断＆レコードの保存
-        result = super().form_valid(form)
-
-        # login 
-        user = self.object
-        login(self.request, user)
-        return result
-
-class MyLoginView(LoginView):
-    template_name = 'login/login.html'
-    form_class = LoginForm
-
-class MyLogoutView(LogoutView):
-    template_name = 'login/logout.html'
-
-class MyUserView(LoginRequiredMixin, TemplateView):
-    template_name = 'login/user.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
-        return context
+class CreateUserView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class ObtainTokenView(generics.GenericAPIView):
+    serializer_class = UserSerializer
+    def post(self, request, *args, **kwargs):
+        username = request.data['username']
+        password = request.data['password']
+        user = User.objects.filter(username=username).first()
+        if user and user.check_password(password):
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+        elif not user:
+            return Response({"error": "Invalid username"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"error": "Incorrect password"}, status=status.HTTP_401_UNAUTHORIZED)
