@@ -1,12 +1,25 @@
-from models import RecipeGraph
+from recipe.models import Dish
+from recommend.models import RecipeGraph
+from django.db.models import Q
 
 # 入力：レシピのid
 # 出力：レシピグラフでの入力の近傍{"id":同時に選ばれた回数}
 def get_neighbour_ids(recipe_id):
-    neighbor_recipes = RecipeGraph.objects.filter(id1_dish = recipe_id)
+    try:
+        input = Dish.objects.get(dish_id = recipe_id)
+    except Dish.DoesNotExist as e:
+        print(e)
+        return {}
+
+    neighbor_recipes = RecipeGraph.objects.filter(Q(dish1 = input) | Q(dish2 = input))
     neighbors = {}
     for recipe_edge in neighbor_recipes:
-        neighbors[recipe_edge.id2_dish] = recipe_edge.num_selected
+        if recipe_edge.dish1.dish_id == recipe_id:
+            neighbors[recipe_edge.dish2.dish_id] = recipe_edge.num_selected
+        elif recipe_edge.dish2.dish_id == recipe_id:
+            neighbors[recipe_edge.dish1.dish_id] = recipe_edge.num_selected
+        print(neighbors)
+
     return neighbors
 
 
@@ -16,12 +29,13 @@ def get_neighbour_ids(recipe_id):
 # 出力：推薦レシピのidリスト
 def make_recommend_list(recipe_ids, max_num=5):
     recommend_recipe_ids = {}
-    for i, recipe in enumerate(recipe_ids):
-        neighbour_ids = get_neighbour_ids(recipe)
+    for i, recipe_id in enumerate(recipe_ids):
+        neighbour_ids = get_neighbour_ids(recipe_id)
         if not i:
-            recommend_recipes = neighbour_ids
+            recommend_recipe_ids = neighbour_ids
             continue
-        for k in recommend_recipe_ids.keys():
+        ids = list(recommend_recipe_ids.keys())
+        for k in ids:
             if k in neighbour_ids:
                 recommend_recipe_ids[k] += neighbour_ids[k]
             else:
@@ -30,5 +44,5 @@ def make_recommend_list(recipe_ids, max_num=5):
                 # recommend_recipe_ids[k] = neighbour_ids[k]
                 recommend_recipe_ids.pop(k)     
 
-    recommend_lists = sorted(recommend_recipe_ids.items(), key= lambda x: x[1])
+    recommend_lists = sorted(recommend_recipe_ids.items(), key= lambda x: x[1], reverse=True)
     return recommend_lists[:max_num]
