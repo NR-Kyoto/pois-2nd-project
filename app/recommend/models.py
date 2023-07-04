@@ -3,13 +3,15 @@ from recipe.models import Dish
 
 # Create your models here.
 class RecipeGraph(models.Model):
-    id1_dish = models.ForeignKey(
+    dish1 = models.ForeignKey(
             Dish,
+            default=-1,
             related_name="DishTable1",
             on_delete=models.CASCADE,
         )
-    id2_dish = models.ForeignKey(
+    dish2 = models.ForeignKey(
             Dish,
+            default=-1,
             related_name="DishTable2",
             on_delete=models.CASCADE,
         )
