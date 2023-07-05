@@ -41,7 +41,7 @@ class RecipeTestCase(TestCase):
         self.client.force_login(self.user)
         register_menu(self.request, [self.dish2, self.dish1])
         register_menu(self.request, [self.dish1, self.dish2, self.dish3])
-        self.assertEqual(get_menu_history(self.request), [{'date': datetime.date(2023, 6, 27), 'dish': [(1,), (2,)]}, {'date': datetime.date(2023, 6, 27), 'dish': [(1,), (2,), (3,)]}])
+        self.assertEqual(get_menu_history(self.request), [{'date': datetime.date.today(), 'dish': [(1,), (2,)]}, {'date': datetime.date.today(), 'dish': [(1,), (2,), (3,)]}])
         objs = RecipeGraph.objects.filter(dish1=self.dish1)
         obj=objs[0]
         self.assertEqual((obj.dish1, obj.dish2, obj.num_selected), (self.dish1, self.dish2, 2))
