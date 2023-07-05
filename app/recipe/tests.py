@@ -10,7 +10,11 @@ import datetime
 UserModel = get_user_model()
 
 class RecipeTestCase(TestCase):
+
+    # fixtures = ["db_dish.json"] # <- jsonファイルで書いたデータをDBに読み込む
+
     def setUp(self):
+
         self.user = UserModel.objects.create(
             username="kanade"
         )
