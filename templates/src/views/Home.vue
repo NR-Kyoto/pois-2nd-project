@@ -89,7 +89,7 @@
               </v-col>
             </v-row>
           </div>
-        </div>>
+        </div>
       </v-col>
     </v-row>
   </div>
