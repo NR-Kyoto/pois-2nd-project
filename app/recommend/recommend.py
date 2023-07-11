@@ -1,5 +1,6 @@
-from recipe.models import Dish
-from recommend.models import RecipeGraph
+from app.recipe.models import Dish
+from app.recommend.models import RecipeGraph
+
 from django.db.models import Q
 
 # 入力：レシピのid
