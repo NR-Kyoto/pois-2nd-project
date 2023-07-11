@@ -2,7 +2,7 @@ from django.shortcuts import render
 from recipe.models import Menu, MenuDetail, Dish, CookingTool
 from recommend.models import RecipeGraph
 
-def update_recipe_graph_table(dish_list: list):
+def update_recipe_graph_table(dish_list: list[Dish]):
     # RecipeGraphの更新
     if len(dish_list) < 2: return None
     
@@ -14,7 +14,7 @@ def update_recipe_graph_table(dish_list: list):
             obj.num_selected +=1
             obj.save()
 
-def register_menu(request, dish_list: list) -> None:
+def register_menu(request, dish_list: list[Dish]) -> None:
     '''
     ユーザがデータベースに献立を追加する時に使う関数
     '''
