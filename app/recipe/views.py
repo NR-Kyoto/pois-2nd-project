@@ -1,10 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from .scheduler import RecipeScheduler
+
 from recipe.models import Menu, MenuDetail, Dish, CookingTool
 from recommend.models import RecipeGraph
 
-from .scheduler import RecipeScheduler
+def test(request):
+    scheduler = RecipeScheduler(request.user, ['ハンバーガー', 'コンソメスープ', 'サラダ'])
+    schedule = scheduler.scheduling()
+    # print(schedule)
+    # schedule = []
+
+    return HttpResponse(schedule)
 
 def update_recipe_graph_table(dish_list: list):
     # RecipeGraphの更新

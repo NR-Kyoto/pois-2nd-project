@@ -47,6 +47,21 @@ class CookingTool(models.Model):
             default=0,
             validators=[MinValueValidator(0), MaxValueValidator(100)]
         )
+    #フライパン
+    flying_pan = models.IntegerField(
+            default=0,
+            validators=[MinValueValidator(0), MaxValueValidator(100)]
+        )
+    #鍋
+    sauce_pan = models.IntegerField(
+            default=0,
+            validators=[MinValueValidator(0), MaxValueValidator(100)]
+        )
+    #ボール
+    bowl = models.IntegerField(
+            default=0,
+            validators=[MinValueValidator(0), MaxValueValidator(100)]
+        )
     #コンロ
     stove = models.IntegerField(
             default=0,
