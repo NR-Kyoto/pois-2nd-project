@@ -101,3 +101,23 @@ DjangoのTestCaseクラスを用いたテストを行う場合は、以下をテ
 ```python
 fixtures = ["db_dish.json"]
 ```
+## How to use Yarn
+
+Step 1 -> Enter Docker container: 
+
+```shell
+docker-compose exec django bash
+```
+
+Step 2 -> build dev:
+
+```shell
+cd UI project path -> giraffe
+yarn install
+
+yarn run dev
+```
+
+access localhost:3000
+
+then you can enter the homepages

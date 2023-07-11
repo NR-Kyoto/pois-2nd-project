@@ -1,6 +1,53 @@
 from django.shortcuts import render
-from recipe.models import Menu, MenuDetail, Dish, CookingTool
-from recommend.models import RecipeGraph
+from django.http import HttpResponse
+from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
+from app.recommend.models import RecipeGraph
+import json
+
+def cal_total_time(dish_id: int) -> int:
+    '''
+    一つの料理の合計時間
+    '''
+    try:
+        obj = Dish.objects.get(dish_id=dish_id)
+        time = 0
+        for p in obj.manual["procedure"]:
+            time += p["time"]
+        return time
+    except Dish.DoesNotExist as e:
+        print(e)
+        return -1
+
+def get_recipe_procedure(dish_id: int) -> list[str]:
+    '''
+    '''
+    try:
+        obj = Dish.objects.get(dish_id=dish_id)
+        out_list = []
+        for p in obj.manual["procedure"]:
+            out_list.append(p["text"])
+        return out_list
+    except Dish.DoesNotExist as e:
+        print(e)
+        return [""]
+
+def get_dish_info(dish: Dish) -> dict:
+    d = {}
+    d["id"] = dish.dish_id
+    d["dish_name"] = dish.dish_name
+    d["time"] = cal_total_time(dish.dish_id)
+    d["ingredient"] = dish.manual["ingredient"]
+    d["img_name"] = ""
+    return d
+
+def get_dish_detail_info(dish_id) -> dict:
+    try:
+        dish = Dish.objects.get(dish_id=dish_id)
+        d = get_dish_info(dish)
+        d["procedure"] = get_recipe_procedure(dish_id)
+        return d
+    except:
+        return {}
 
 def update_recipe_graph_table(dish_list: list[Dish]):
     # RecipeGraphの更新
@@ -49,17 +96,10 @@ def get_menu_history(request) -> list:
     for menu in menu_sets:
         
         dishes = MenuDetail.objects.filter(menu=menu).values_list("dish")
-        menu_dict = {"date":menu.date, "dish":list(dishes)}
+        menu_dict = {"date":menu.date, "dish_names":[d.name for d in dishes]}
         history_list.append(menu_dict)
         
     return history_list
-    
-def search_dish(input:str) -> list:
-    '''
-    入力された文字列から部分マッチする料理を検索する
-    '''
-    dishes = Dish.objects.filter(name__contains=input).values_list("dish_name")
-    return list(dishes)
 
 def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
     '''
@@ -67,13 +107,56 @@ def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
     tool_info = {
         "kitchen_knife": int #包丁
         "cutting_board": int #まな板
+        "flying_pan": 
+        "sauce_pan": 
+        "bowl": 
         "stove" : int #コンロ
     }
     '''
     if tool_info is None:
-        tool_info = {"kitchen_knife":0, "cutting_board":0, "stove":0}
+        tool_info = {"kitchen_knife":0, "cutting_board":0, "flying_pan":0, "sauce_pan":0, "bowl":0, "stove":0}
     obj, is_created = CookingTool.objects.get_or_create(user=request.user)
     obj.kitchen_knife = tool_info["kitchen_knife"]
     obj.cutting_board = tool_info["cutting_board"]
+    obj.flying_pan = tool_info["flying_pan"]
+    obj.sauce_pan = tool_info["sauce_pan"]
+    obj.bowl = tool_info["bowl"]
     obj.stove = tool_info["stove"]
 
+def regist_menu(request) -> HttpResponse:
+
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            dish_obj_list = [Dish.objects.get(dish_id=id) for id in body]
+            register_menu(request, dish_obj_list)
+            return HttpResponse(json.dumps({"result": "Success"}, ensure_ascii=False))
+        except Exception as e:
+            print(e)
+            return HttpResponse(json.dumps({"result": "Failed"}, ensure_ascii=False))
+
+    return HttpResponse('POST ONLY')
+
+def search_dish(request) -> HttpResponse:
+    '''
+    入力された文字列から部分マッチする料理を検索する
+    '''
+    body = json.loads(request.body)
+    dishes = Dish.objects.filter(name__contains=body["search_str"]).values_list("dish_name")
+    out = [get_dish_info(dish) for dish in dishes]
+    out = json.dumps(out, ensure_ascii=False)
+
+    return HttpResponse(out)
+
+def show_dish_info(request) -> HttpResponse:
+    body = json.loads(request.body)
+    d = get_dish_detail_info(body["id"])
+    return HttpResponse(json.dumps(d, ensure_ascii=False))
+
+def regist_cookingtool_info(request) -> HttpResponse:
+    body = json.loads(request.body)
+    make_or_update_cookingtool_info(request, body)
+
+def show_menu_history(request) -> HttpResponse:
+    l = get_menu_history(request)
+    return HttpResponse(json.dumps(l, ensure_ascii=False))

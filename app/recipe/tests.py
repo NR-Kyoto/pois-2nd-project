@@ -2,9 +2,9 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from django.contrib.auth import get_user_model
 
-from recipe.models import Menu, MenuDetail, Dish, CookingTool
-from recommend.models import RecipeGraph
-from recipe.views import *
+from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
+from app.recommend.models import RecipeGraph
+from app.recipe.views import *
 import datetime
 
 UserModel = get_user_model()
@@ -51,6 +51,23 @@ class RecipeTestCase(TestCase):
         self.assertEqual((obj.dish1, obj.dish2, obj.num_selected), (self.dish1, self.dish2, 2))
         obj=objs[1]
         self.assertEqual((obj.dish1, obj.dish2, obj.num_selected), (self.dish1, self.dish3, 1))
+
+class UseDBTest(TestCase):
+    fixtures = ["db_dish.json"] # <- jsonファイルで書いたデータをDBに読み込む
+
+    def setUp(self):
+
+        self.user = UserModel.objects.create(
+            username="kanade"
+        )
+        self.request = RequestFactory()
+        self.request.user = self.user
+    
+    def test_cal_time(self):
+        self.client.force_login(self.user) # ログイン
+        t = cal_total_time(1)
+        self.assertEqual(t, 1800)
+
         
 
 
