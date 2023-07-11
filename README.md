@@ -90,3 +90,23 @@ urlpatterns = [
     path('', views.ビューの関数, name='URLパスの名前'),
 ]
 ```
+## How to use Yarn
+
+Step 1 -> Enter Docker container: 
+
+```shell
+docker-compose exec vue bash
+```
+
+Step 2 -> build dev:
+
+```shell
+cd path -> pois-2nd-project
+yarn install
+
+yarn run dev
+```
+
+access localhost:3000
+
+then you can enter the homepages
