@@ -60,8 +60,8 @@
                 @click="$router.push('/')"
             >
               <v-icon color="primary" large>mdi-feather</v-icon>
-              Pois
-              <span class="accent--text">Potrol</span>
+              App
+              <span class="accent--text">Title</span>
             </v-toolbar-title>
           </v-col>
 
@@ -118,8 +118,8 @@ export default {
         title: "Home",
         to: "/",
       },
-      {
-        title: "Category",
+     {
+        title: "Results",
         to: "/category",
       },
       {
@@ -127,7 +127,7 @@ export default {
         to: "/detail",
       },
       {
-        title: "Authors",
+        title: "User page",
         to: "/authors",
       }
     ],

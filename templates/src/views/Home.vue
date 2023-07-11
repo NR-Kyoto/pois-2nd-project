@@ -11,20 +11,20 @@
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
-              <v-col>
+              <!--v-col>
                 <v-btn color="secondary" to="category">Travel</v-btn>
-              </v-col>
+              </v-col-->
               <v-col cols="12" lg="8" md="10" xl="7">
-                <h2 class="text-h3 py-3" style="line-height: 1.2">
-                  Great Travel Blogs From Around The World To Inspire You
+                <h2 class="text-h3 font-weight-bold py-3" style="line-height: 1.2">
+                  Image of most recommended recipe must be here
                 </h2>
               </v-col>
               <v-col class="d-flex align-center">
-                <v-avatar class="elevation-4" color="secondary">
+                <!--v-avatar class="elevation-4" color="secondary">
                   <v-icon large>mdi-feather</v-icon>
-                </v-avatar>
+                </v-avatar-->
 
-                <div class="text-h6 pl-2">Yan Lee · 22 July 2019</div>
+                <div class="text-h6 pl-2">Contributer name · Posted date</div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -61,26 +61,28 @@
                           src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
                           style="border-radius: 16px"
                       >
-                        <v-card-text>
+                      <div class="text-h5 font-weight-bold white--text text-center">
+                          Recipe image must be here
+                      </div>
+                        <!--v-card-text>
                           <v-btn color="secondary" to="category">TIPS</v-btn>
-                        </v-card-text>
+                        </v-card-text-->
                       </v-img>
 
                       <v-card-text>
                         <div class="text-h5 font-weight-bold primary--text">
-                          How to write an awesome blog post in 5 steps
+                          Recipe title must be here
                         </div>
 
                         <div class="text-body-1 py-4">
-                          Ultrices sagittis orci a scelerisque. Massa placerat
-                          duis ultricies lacus sed turpis
+                          Main ingredients / Cooking time
                         </div>
 
                         <div class="d-flex align-center">
-                          <v-avatar color="secondary" size="36">
+                          <!--v-avatar color="secondary" size="36">
                             <v-icon dark>mdi-feather</v-icon>
-                          </v-avatar>
-                          <div class="pl-2">Yan Lee · 22 July 2019</div>
+                          </v-avatar-->
+                          <div class="pl-2">Contributer name · Posted date</div>
                         </div>
                       </v-card-text>
                     </v-card>
@@ -89,7 +91,7 @@
               </v-col>
             </v-row>
           </div>
-        </div>>
+        </div>
       </v-col>
     </v-row>
   </div>

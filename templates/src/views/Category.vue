@@ -13,9 +13,8 @@
         <div>
           <div>
             <div>
-              <h2 class="text-h4 font-weight-bold">ANIMAL</h2>
-
-              <h4 class="text-h6">Some category description goes here</h4>
+              <h2 class="text-h4 font-weight-bold">[The number of candidates] recipes found</h2>
+              <!--h4 class="text-h6">Some category description goes here</h4-->
             </div>
 
             <v-divider class="my-4"></v-divider>
@@ -44,26 +43,28 @@
                         style="border-radius: 16px"
                       >
                         <v-card-text>
-                          <v-btn color="accent">ANIMAL</v-btn>
+                          <!--v-btn color="accent">ANIMAL</v-btn-->
+                          <div class="text-h5 font-weight-bold white--text">
+                          Recipe image must be here
+                          </div>
                         </v-card-text>
                       </v-img>
 
                       <v-card-text>
                         <div class="text-h5 font-weight-bold primary--text">
-                          How to write an awesome blog post in 5 steps
+                          Recipe title must be here
                         </div>
 
                         <div class="text-body-1 py-4">
-                          Ultrices sagittis orci a scelerisque. Massa placerat
-                          duis ultricies lacus sed turpis
+                          Main ingredients / Cooking time
                         </div>
 
                         <div class="d-flex align-center">
-                          <v-avatar color="accent" size="36">
+                          <!--v-avatar color="accent" size="36">
                             <v-icon dark>mdi-feather</v-icon>
-                          </v-avatar>
+                          </v-avatar-->
 
-                          <div class="pl-2">Yan Lee · 22 July 2019</div>
+                          <div class="pl-2">Contributer name · Posted date</div>
                         </div>
                       </v-card-text>
                     </v-card>

@@ -12,9 +12,33 @@
       <v-col cols="12" lg="12" xl="8">
         <div>
           <div>
-            <div class="my-2">
-              <h2 class="text-h4 font-weight-bold">Our Authors</h2>
+            <div class="my-8">
+              <h2 class="text-h2 font-weight-bold">User name must be here</h2>
             </div>
+
+            <div class="my-4">
+              <h2 class="text-h4 font-weight-bold">Environment</h2>
+            </div>
+
+            <div class="py-4">
+                  <v-alert
+                    class="text-h3 font-weight-bold text-center"
+                    border="left"
+                    colored-border
+                    color="accent"
+                    style="line-height: 1.5;"
+                  >
+                    ? knives<br>
+                    ? cutting boards<br>
+                    ? stoves<br>
+                  </v-alert>
+              </div>
+
+            <div class="my-4">
+              <h2 class="text-h4 font-weight-bold">History</h2>
+            </div>
+
+            <!--v-divider class="my-4"></v-divider-->
 
             <v-row>
               <v-col cols="12" md="6" v-for="i in 8" :key="i">
@@ -37,22 +61,25 @@
                         height="300px"
                         class="elevation-2"
                         style="border-radius: 16px"
-                      ></v-img>
+                      >
+                        <div class="text-h5 font-weight-bold white--text text-center">
+                          Recipe image must be here
+                        </div>
+                      </v-img>
 
                       <v-card-text class="text-center">
-                        <v-avatar color="secondary" size="86" class="authors">
+                        <!--v-avatar color="secondary" size="86" class="authors">
                           <v-icon dark size="64">mdi-feather</v-icon>
-                        </v-avatar>
+                        </v-avatar-->
 
                         <div
                           class="text-h5 font-weight-bold primary--text pt-4"
                         >
-                          Yan Lee
+                          Recipe title must be here
                         </div>
 
                         <div class="text-body-1 py-4">
-                          Ultrices sagittis orci a scelerisque. Massa placerat
-                          duis ultricies lacus sed turpis tincidunt id.
+                          Main ingredients/Cooking time
                         </div>
 
                         <div>
