@@ -16,6 +16,8 @@ from plotly import offline
 import time
 import psutil
 
+from recipe.models import Dish, CookingTool
+
 # リソースのサンプルデータ
 user_resource_sample = {
             'pan': 2,
@@ -50,7 +52,17 @@ class Schedule:
     def __init__(self, user):
         
         # ユーザの持っているリソースを展開
-        user_resource = user_resource_sample
+        # user_resource = user_resource_sample
+        obj = CookingTool.objects.get(user=user)
+        user_resource = {
+            'pan': obj.flying_pan,
+            'knife': obj.kitchen_knife,
+            'board': obj.cutting_board,
+            'bowl': obj.bowl,
+            'stove': obj.stove,
+            'pot': obj.sauce_pan
+        }
+
         self.resources = []
         for k, v in user_resource.items():
 
@@ -296,6 +308,7 @@ class Schedule:
         fig.update_layout(xaxis_type="linear", xaxis_tickmode="linear", xaxis_tick0=0, xaxis_dtick=300)  # 1時間ごとの目盛り
 
         offline.plot(fig)
+        fig.show()
 
 # 調理作業（タスク）用クラス
 class Task:
@@ -338,6 +351,11 @@ class Task:
             if method == 'other':
                 self.resources = self.previous.resources
 
+            elif method == 'leave':
+                self.resources = self.previous.resources
+                if 'user' in self.resources:
+                    self.resources.remove('user')
+
             else:
                 self.resources = Task.method_to_resource.get(method)
 
@@ -350,21 +368,25 @@ class Task:
 # ユーザ毎にインスタンス化することで複数アクセスを可能にする
 class RecipeScheduler:
 
+    # self.user
     # self.all_tasks        : すべてのタスクについてidをキー，インスタンスを値とする辞書
     # self.optimal_schedule : 最適なスケジュール．Schedule
     # self.wash_tasks       : 洗い物タスクのインスタンス．リソースをキー，インスタンスを値とする辞書
     # self.recipe_graph     : レシピを表す有向グラフ．
 
-    def __init__(self, dishes):
+    def __init__(self, user, dishes):
+
+        self.user = user
 
         # 全レシピの作業集合を生成
-        with open('./algorithm/recipe.json', encoding="utf-8") as f:
-            d = json.load(f)
+        # with open('./algorithm/recipe.json', encoding="utf-8") as f:
+        #     d = json.load(f)
 
         self.all_tasks = dict()
         for dish in dishes:
+            obj = Dish.objects.get(dish_name=dish)
             time = 0
-            for task in d.get(dish):
+            for task in obj.manual.get('procedure'):
                 instaced = RecipeScheduler.jsonToTask(task, self.all_tasks)
                 self.all_tasks[task.get('id')] = instaced
                 time += instaced.time
@@ -372,7 +394,7 @@ class RecipeScheduler:
             print("%s : %d sec" % (dish, time))
 
         # 最適なスケジュール
-        self.optimal_schedule = Schedule('user1')
+        self.optimal_schedule = Schedule(self.user)
         self.optimal_schedule.finish_time = sys.maxsize
 
         # 洗い物タスク
@@ -470,7 +492,7 @@ class RecipeScheduler:
         # 最初に実行できる作業
         unassigned_tasks = RecipeScheduler.addExecutableTask(E, F, unassigned_tasks)
 
-        schedule = Schedule('user1')
+        schedule = Schedule(self.user)
         
         # 時間計測開始
         time_sta = time.time()
@@ -539,14 +561,18 @@ class RecipeScheduler:
         else:
             self.addCleanUpTask(P) # 最後の洗い物を行う
 
-            global counter
-            counter += 1
-            mem = psutil.virtual_memory() 
+            # global counter
+            # counter += 1
+            # mem = psutil.virtual_memory() 
 
             # print("counter : %d (%f) %dsec" % (counter, mem.used, P.finish_time))
 
             # より優れたスケジュールなら入れ替え
             if P.finish_time < self.optimal_schedule.finish_time: 
+                
+                global counter
+                counter += 1
+                print("counter : %d (%d sec)" % (counter, P.finish_time))
                 self.optimal_schedule = copy.deepcopy(P)
                 self.optimal_schedule.plotSchedule()
 
