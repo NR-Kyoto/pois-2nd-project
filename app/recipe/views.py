@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
 from app.recommend.models import RecipeGraph
 import json
@@ -123,7 +123,7 @@ def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
     obj.bowl = tool_info["bowl"]
     obj.stove = tool_info["stove"]
 
-def regist_menu(request) -> HttpResponse:
+def regist_menu(request: HttpRequest) -> HttpResponse:
 
     if request.method == 'POST':
         try:
@@ -137,7 +137,7 @@ def regist_menu(request) -> HttpResponse:
 
     return HttpResponse('POST ONLY')
 
-def search_dish(request) -> HttpResponse:
+def search_dish(request: HttpRequest) -> HttpResponse:
     '''
     入力された文字列から部分マッチする料理を検索する
     '''
@@ -148,12 +148,17 @@ def search_dish(request) -> HttpResponse:
 
     return HttpResponse(out)
 
-def show_dish_info(request) -> HttpResponse:
-    body = json.loads(request.body)
-    d = get_dish_detail_info(body["id"])
-    return HttpResponse(json.dumps(d, ensure_ascii=False))
+def show_dish_info(request: HttpRequest) -> HttpResponse:
 
-def regist_cookingtool_info(request) -> HttpResponse:
+    if request.method == "POST":
+        print(request.body)
+        body = json.loads(request.body)
+        d = get_dish_detail_info(body["id"])
+        return HttpResponse(json.dumps(d, ensure_ascii=False))
+    
+    return HttpResponse('POST ONLY')
+
+def regist_cookingtool_info(request: HttpRequest) -> HttpResponse:
     body = json.loads(request.body)
     make_or_update_cookingtool_info(request, body)
 
