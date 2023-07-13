@@ -1,5 +1,6 @@
 ###### Requirements without Version Specifiers ######
 networkx
+matplotlib
 pandas
 plotly
 psutil

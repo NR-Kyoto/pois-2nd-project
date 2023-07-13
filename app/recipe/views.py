@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from rest_framework.response import Response
-from rest_framework.status import HTTP_401_UNAUTHORIZED
+from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
 
 from .scheduler import RecipeScheduler
 
@@ -10,14 +10,6 @@ from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
 from app.recommend.models import RecipeGraph
 
 from rest_framework.views import APIView
-
-def test(request):
-    scheduler = RecipeScheduler(request.user, ['ハンバーガー', 'コンソメスープ', 'サラダ'])
-    schedule = scheduler.scheduling()
-    # print(schedule)
-    # schedule = []
-
-    return HttpResponse(schedule)
 
 class MergeRecipes(APIView):
     
@@ -31,13 +23,20 @@ class MergeRecipes(APIView):
 
         # 空配列
         if len(recipes) == 0:
-            return Response({"error": "Invalid recipes"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "No recipes"}, status=HTTP_406_NOT_ACCEPTABLE)
 
-        scheduler = RecipeScheduler(request.user, request.data['recipes'])
-        # schedule = scheduler.scheduling()
-        schedule = []
+        try:
+            scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'])
+            schedule = scheduler.scheduling()
 
-        return Response(schedule)
+            del scheduler 
+
+            return Response(schedule)
+
+        except ValueError as e:
+            print(e)
+            return Response({"error": "cannot make scheduler"}, status=HTTP_406_NOT_ACCEPTABLE)
+
 
 def update_recipe_graph_table(dish_list: list):
     # RecipeGraphの更新

@@ -12,6 +12,9 @@ class Dish(models.Model):
     dish_name = models.CharField(max_length = 50)
     manual = models.JSONField()
 
+    def __str__(self):
+        return self.dish_name + "(" + str(self.dish_id) + ")"
+
 class Menu(models.Model):
     menu_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(

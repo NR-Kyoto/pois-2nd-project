@@ -5,7 +5,7 @@ import re
 import random
 
 import networkx as nx
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # スケジュールの表示
 import pandas as pd
@@ -17,16 +17,6 @@ import time
 import psutil
 
 from app.recipe.models import Dish, CookingTool
-
-# リソースのサンプルデータ
-user_resource_sample = {
-            'pan': 2,
-            'knife': 1,
-            'board': 1,
-            'bowl': 2,
-            'stove': 2,
-            'pot': 1
-}
 
 # リソースの種類と洗うのにかかる時間
 WT = {
@@ -52,7 +42,6 @@ class Schedule:
     def __init__(self, user):
         
         # ユーザの持っているリソースを展開
-        # user_resource = user_resource_sample
         obj = CookingTool.objects.get(user=user)
         user_resource = {
             'pan': obj.flying_pan,
@@ -228,7 +217,7 @@ class Schedule:
         if status == 'meat' and task_status == 'vegetable':
             return True
 
-        elif status == 'seasoning':
+        elif status == 'seasoning' and task_status != 'seasoning':
             return True
 
         return False
@@ -261,6 +250,26 @@ class Schedule:
         # 間が0秒でないものを返す
         tmp = [(st, end) for st, end in ft if st != end]
         return tmp
+
+    # スケジュールをJSONに変換
+    def getJson(self):
+
+            result = []
+
+            for time, task, status in self.task_timing:
+
+                if status == 'end':
+                    continue
+
+                result.append({
+                    "dish_index": task.dish_id,
+                    "context": task.context,
+                    "tools": task.resources,
+                    "time": task.time
+                })
+
+            return result
+
 
     # スケジュールを描写（デバック用）
     def plotSchedule(self):
@@ -313,6 +322,7 @@ class Schedule:
 # 調理作業（タスク）用クラス
 class Task:
 
+    # self.dish_id      : スケジュール上での料理のインデックス
     # self.task_id      : タスクを一意に決める名前
     # self.status       : タスク終了時のリソースの状態
     # self.method       : 調理方法
@@ -320,6 +330,7 @@ class Task:
     # self.time         : 調理時間
     # self.condition    : 調理を始めるための条件．Taskのリスト
     # self.previous     : 直前に行うべき調理．Task
+    # self.context      : 調理作業の文章
 
     method_to_resource = dict({
         'cut' : ['user', 'knife', 'board'],
@@ -328,38 +339,37 @@ class Task:
         'mix' : ['user', 'bowl'],
     })
 
-    def __init__(
-        self,
-        task_id=None, ingredient=None, method='wash', resources=None, time=0,
-        condition=None, previous=None,
-        table=None
-    ):
-        self.status = ingredient
-        self.method = method
-        self.time = time
+    def __init__(self, data=None, dish_index=0, table=None):
 
-        if method == 'wash':
-            self.task_id = 'wash_' + resources
-            self.resources = ['user', resources]
+        self.dish_id = dish_index
+        self.status = data.get('ingredient')
+        self.method = data.get('method')
+        self.time = int(data.get('time'))
+
+        if self.method == 'wash':
+            self.task_id = 'wash_' + data.get('resources')
+            self.resources = ['user', data.get('resources')]
             self.condition = None
             self.previous = None
+            self.context = data.get('resources') + "を洗う"
 
         else:
-            self.task_id = task_id
-            self.previous = table.get(previous)
+            self.task_id = data.get('id')
+            self.previous = table.get(data.get('previous'))
+            self.context = data.get('text')
 
-            if method == 'other':
-                self.resources = self.previous.resources
+            if self.method == 'other':
+                self.resources = self.previous.resources.copy()
 
-            elif method == 'leave':
-                self.resources = self.previous.resources
+            elif self.method == 'leave':
+                self.resources = self.previous.resources.copy()
                 if 'user' in self.resources:
                     self.resources.remove('user')
 
             else:
-                self.resources = Task.method_to_resource.get(method)
+                self.resources = Task.method_to_resource.get(self.method).copy()
 
-            self.condition = [table.get(x) for x in condition] if condition else []
+            self.condition = [table.get(x) for x in data.get('condition')] if data.get('condition') else []
 
     def __str__(self):
         return self.task_id + "<"  + (self.status or "None") + ":" + str(self.time) + ":" + self.method + ":" + str(self.resources) + ">"
@@ -374,24 +384,38 @@ class RecipeScheduler:
     # self.wash_tasks       : 洗い物タスクのインスタンス．リソースをキー，インスタンスを値とする辞書
     # self.recipe_graph     : レシピを表す有向グラフ．
 
-    def __init__(self, user, dishes):
+    # self.start_time       : 計算の開始時間（強制終了用）
+    # self.limit_time       : 計算の最大時間
 
+    # self.result_json      : フロントに渡すJSON
+
+    def __init__(self, user, dishes, limit_time=60):
+
+        # ユーザ
         self.user = user
 
-        # 全レシピの作業集合を生成
-        # with open('./algorithm/recipe.json', encoding="utf-8") as f:
-        #     d = json.load(f)
-
         self.all_tasks = dict()
-        for dish in dishes:
-            obj = Dish.objects.get(dish_name=dish)
+        dish_names = []
+        ingredients = []
+        for i, dish in enumerate(dishes):
+
+            try:
+                obj = Dish.objects.get(dish_id=dish)
+
+            except Dish.DoesNotExist:
+                raise ValueError("Invalid Dish")
+            
             time = 0
             for task in obj.manual.get('procedure'):
-                instaced = RecipeScheduler.jsonToTask(task, self.all_tasks)
-                self.all_tasks[task.get('id')] = instaced
+                instaced = Task(data=task, dish_index=i+1, table=self.all_tasks)
+                self.all_tasks[instaced.task_id] = instaced
                 time += instaced.time
 
-            print("%s : %d sec" % (dish, time))
+            dish_name = obj.dish_name
+            dish_names.append(dish_name)
+            ingredients.append(obj.manual.get('ingredient'))
+
+            print("%s : %d sec" % (dish_name, time))
 
         # 最適なスケジュール
         self.optimal_schedule = Schedule(self.user)
@@ -400,35 +424,32 @@ class RecipeScheduler:
         # 洗い物タスク
         wash_resources = [x for x in self.optimal_schedule.resources if 'stove' not in x]
 
-        self.wash_tasks = dict(zip(
-            wash_resources,
-            [Task(resources=resource, time=WT.get(re.findall('[a-z]+', resource)[0])) for resource in wash_resources]
-        ))
+        self.wash_tasks = dict()
+        for resource in wash_resources:
+            self.wash_tasks[resource] = Task(data={
+                "method": "wash",
+                "time": WT.get(re.findall('[a-z]+', resource)[0]),
+                "resources": resource
+            })
 
         # タスクグラフ
         self.recipe_graph = self.recipeToGraph()
 
         if not self.recipe_graph:
             print('Recipe is invalid')
+            raise ValueError("cannot make graph")
 
-        # exit()
+        # 計算時間の制限
+        self.start_time = 0
+        self.limit_time = limit_time
 
-    # 調理作業をjsonからTaskのインスタンスへ変換
-    def jsonToTask(json_task, table):
-
-        # インスタンス化
-        task = Task(
-            task_id = json_task.get('id'),
-            ingredient = json_task.get('ingredient'),
-            method = json_task.get('method'),
-            resources = None,
-            time = int(json_task.get('time')),
-            condition = json_task.get('condition'),
-            previous = json_task.get('previous'),
-            table = table
-        )
-
-        return task
+        # 結果を格納する
+        self.result_json = dict({
+            "time": 0,
+            "dish_names": dish_names,
+            "procedure": [],
+            "ingredient": ingredients
+        })
 
     def recipeToGraph(self):
 
@@ -476,8 +497,10 @@ class RecipeScheduler:
         if not nx.is_directed_acyclic_graph(graph):
             return None
 
-        # nx.draw(graph, with_labels = True)
-        # plt.show()
+        plt.clf()
+        nx.draw_circular(graph, with_labels = True)
+        plt.show()
+        plt.savefig("graph.png")
 
         return graph
 
@@ -488,14 +511,14 @@ class RecipeScheduler:
         F = [] # 終了した作業集合
 
         unassigned_tasks = list(self.all_tasks.values()) # 未割当（実行可能ではない）のタスク
-        
+
         # 最初に実行できる作業
         unassigned_tasks = RecipeScheduler.addExecutableTask(E, F, unassigned_tasks)
 
         schedule = Schedule(self.user)
         
         # 時間計測開始
-        time_sta = time.time()
+        self.start_time = time.time()
 
         # 探索の開始
         self.recursive(E, F, schedule, unassigned_tasks)
@@ -503,9 +526,12 @@ class RecipeScheduler:
         # 時間計測終了
         time_end = time.time()
 
-        print(time_end - time_sta)
+        print(time_end - self.start_time)
 
-        return [(time, task.task_id) for time, task, status in self.optimal_schedule.task_timing if status == 'start']
+        self.result_json["time"] = self.optimal_schedule.finish_time
+        self.result_json["procedure"] = self.optimal_schedule.getJson()
+
+        return self.result_json
     
     # taskが終了することにより実行可能になる作業を集合に追加する
     def addExecutableTask(E, F, unassigned_tasks):
@@ -528,6 +554,10 @@ class RecipeScheduler:
     # P : 探索のノードのスケジュール
     # unassigned_tasks : 未割当のタスク集合
     def recursive(self, E, F, P, unassigned_tasks):
+
+        # 計算時間を制限
+        if time.time() - self.start_time > 60:
+            return
 
         # 枝刈りをすべきか
         if self.isBounded(P, E + unassigned_tasks):
