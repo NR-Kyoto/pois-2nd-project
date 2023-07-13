@@ -1,5 +1,5 @@
 from django.db import models
-from recipe.models import Dish
+from app.recipe.models import Dish
 
 # Create your models here.
 class RecipeGraph(models.Model):

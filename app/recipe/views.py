@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from rest_framework.response import Response
+from rest_framework.status import HTTP_401_UNAUTHORIZED
+
 from .scheduler import RecipeScheduler
 
-from recipe.models import Menu, MenuDetail, Dish, CookingTool
-from recommend.models import RecipeGraph
+from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
+from app.recommend.models import RecipeGraph
+
+from rest_framework.views import APIView
 
 def test(request):
     scheduler = RecipeScheduler(request.user, ['ハンバーガー', 'コンソメスープ', 'サラダ'])
@@ -13,6 +18,26 @@ def test(request):
     # schedule = []
 
     return HttpResponse(schedule)
+
+class MergeRecipes(APIView):
+    
+    def post(self, request, *args, **kwargs):
+        
+        # ユーザ認証
+        if not request.user.is_authenticated:
+            return Response(status=HTTP_401_UNAUTHORIZED)
+
+        recipes = request.data['recipes'] # 献立のレシピ
+
+        # 空配列
+        if len(recipes) == 0:
+            return Response({"error": "Invalid recipes"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        scheduler = RecipeScheduler(request.user, request.data['recipes'])
+        # schedule = scheduler.scheduling()
+        schedule = []
+
+        return Response(schedule)
 
 def update_recipe_graph_table(dish_list: list):
     # RecipeGraphの更新

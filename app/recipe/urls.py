@@ -1,6 +1,8 @@
 from django.urls import path
-from . import views
+ 
+from .views import MergeRecipes, test
 
 urlpatterns = [
-    path('test', views.test, name='testpage'),
+    path('test', test, name='testpage'),
+    path('', MergeRecipes.as_view(), name='merge'),
 ]

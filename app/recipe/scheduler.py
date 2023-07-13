@@ -16,7 +16,7 @@ from plotly import offline
 import time
 import psutil
 
-from recipe.models import Dish, CookingTool
+from app.recipe.models import Dish, CookingTool
 
 # リソースのサンプルデータ
 user_resource_sample = {
@@ -422,7 +422,7 @@ class RecipeScheduler:
             ingredient = json_task.get('ingredient'),
             method = json_task.get('method'),
             resources = None,
-            time = json_task.get('time'),
+            time = int(json_task.get('time')),
             condition = json_task.get('condition'),
             previous = json_task.get('previous'),
             table = table
