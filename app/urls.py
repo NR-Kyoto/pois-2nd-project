@@ -15,4 +15,5 @@ urlpatterns = [
     path('', include('app.login.urls')),
     path('recipe/', include('app.recipe.urls')),
     path('recommend/', include('app.recommend.urls')),
+    path('merge/', include('app.recipe.urls'))
 ]

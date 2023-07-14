@@ -79,7 +79,7 @@
             >
           </v-col>
 
-          <v-col v-if="$vuetify.breakpoint.mdAndUp" class="text-right">
+          <v-col v-if="!iconActive" class="text-right">
             <v-btn
                 v-for="(item, i) in btnItems"
                 :key="i"
@@ -94,6 +94,17 @@
               {{ item.text }}
             </v-btn>
           </v-col>
+          <v-col v-if="iconActive" class="text-right">
+            <v-btn
+                :color="primary"
+                :target="_block"
+                :to="`/authors`"
+                class="ml-3 text-capitalize"
+            >
+              <v-icon left>mdi-account</v-icon>
+              {{ username }}
+            </v-btn>
+          </v-col>
         </v-row>
       </v-container>
     </v-app-bar>
@@ -104,6 +115,8 @@
 export default {
   data: () => ({
     drawer: null,
+    iconActive: localStorage.access,
+    username: localStorage.username,
     btnItems: [
       {
         text: "Login",
@@ -125,10 +138,6 @@ export default {
       {
         title: "Detail",
         to: "/detail",
-      },
-      {
-        title: "Authors",
-        to: "/authors",
       }
     ],
   }),

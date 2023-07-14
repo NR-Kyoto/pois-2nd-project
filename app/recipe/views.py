@@ -1,4 +1,42 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+
+from rest_framework.response import Response
+from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
+
+from .scheduler import RecipeScheduler
+
+from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
+from app.recommend.models import RecipeGraph
+
+from rest_framework.views import APIView
+
+class MergeRecipes(APIView):
+    
+    def post(self, request, *args, **kwargs):
+        
+        # ユーザ認証
+        if not request.user.is_authenticated:
+            return Response(status=HTTP_401_UNAUTHORIZED)
+
+        recipes = request.data['recipes'] # 献立のレシピ
+
+        # 空配列
+        if len(recipes) == 0:
+            return Response({"error": "No recipes"}, status=HTTP_406_NOT_ACCEPTABLE)
+
+        try:
+            scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'])
+            schedule = scheduler.scheduling()
+
+            del scheduler 
+
+            return Response(schedule)
+
+        except ValueError as e:
+            print(e)
+            return Response({"error": "cannot make scheduler"}, status=HTTP_406_NOT_ACCEPTABLE)
+
 from django.http import HttpResponse, HttpRequest
 from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
 from app.recommend.models import RecipeGraph
@@ -122,7 +160,6 @@ def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
     obj.sauce_pan = tool_info["sauce_pan"]
     obj.bowl = tool_info["bowl"]
     obj.stove = tool_info["stove"]
-
 def regist_menu(request: HttpRequest) -> HttpResponse:
 
     if request.method == 'POST':

@@ -86,7 +86,7 @@
                 },
                 "procedure": [
                     {
-                        "id": "1",
+                        "id": "vermicellisalad1",
                         "ingredient": "vegetable",
                         "method": "stir",
                         "time": 150,
@@ -95,39 +95,39 @@
                         "text": "たまごを割って、フライパン等で焼く"
                     },
                     {
-                        "id": "2",
+                        "id": "vermicellisalad2",
                         "ingredient": "vegetable",
                         "method": "cut",
                         "time": "240",
-                        "condition": ["1"],
+                        "condition": null,
                         "previous": null,
                         "text": "きゅうり、ハム、薄焼き卵を千切りにする。お好みに合わせて春雨も食べやすい長さに切る。"
                     },
                     {
-                        "id": "3",
-                        "ingredient": "meat",
-                        "method": "leave",
+                        "id": "vermicellisalad3",
+                        "ingredient": "seasoning",
+                        "method": "mix",
                         "time": 90,
                         "condition": null,
                         "previous": null,
                         "text": "醤油、酢、砂糖、ごま油、鶏がらスープ等の調味料を合わせる"
                     },
                     {
-                        "id": "4",
-                        "ingredient": "vegetable",
+                        "id": "vermicellisalad4",
+                        "ingredient": "seasoning",
                         "method": "mix",
                         "time": 120,
-                        "condition": ["2", "3"],
+                        "condition": ["vermicellisalad2", "vermicellisalad3"],
                         "previous": null,
                         "text": "具材と調味料をよく混ぜ合わせる。"
                     },
                     {
-                        "id": "5",
-                        "ingredient": "vegetable",
+                        "id": "vermicellisalad5",
+                        "ingredient": "seasoning",
                         "method": "leave",
                         "time": 300,
-                        "condition": ["4"],
-                        "previous": null,
+                        "condition": ["vermicellisalad4"],
+                        "previous": "vermicellisalad4",
                         "text": "食べるまで冷蔵庫に置いて冷やしておこう。"
                     }
                 ]
@@ -496,7 +496,7 @@
                     },
                     {
                         "id": "udon4",
-                        "ingredient": "seasoning",
+                        "ingredient": "vegetable",
                         "method": "stew",
                         "time": 180,
                         "condition": null,
@@ -505,7 +505,7 @@
                     },
                     {
                         "id": "udon5",
-                        "ingredient": "seasoning",
+                        "ingredient": "vegetable",
                         "method": "stew",
                         "time": 180,
                         "condition": ["udon4"],
@@ -770,7 +770,7 @@
                         "ingredient": "meat",
                         "method": "stir",
                         "time": 60,
-                        "condition": ["rolledomelet2"],
+                        "condition": ["rolledomelet1"],
                         "previous": null,
                         "text": "卵焼き器を中火にかけ、油を含んだキッチンペーパーで油をなじませる。かすかに煙が出るくらいまで中火で熱する。"
                     },
@@ -780,7 +780,7 @@
                         "method": "stir",
                         "time": 300,
                         "condition": ["rolledomelet2"],
-                        "previous": null,
+                        "previous": "rolledomelet2",
                         "text": "中火のままで、1/3の量の卵液を流し入れ全体に広げる。気泡ができたら菜箸でつぶし、半熟状になったら奥から手前に卵を巻く。巻き終わったら奥にずらし、油を塗る。また卵液を入れて繰り返す。"
                     }
                 ]
@@ -837,7 +837,7 @@
                         "condition": [
                             "pmannikumaki1"
                         ],
-                        "previous": null,
+                        "previous": "pmannikumaki1",
                         "text": "豚肉を広げたところにピーマンをのせてピーマン自体をキュッと丸めながらお肉をくるくると巻いていく。折れても気にしない。"
                     },
                     {
@@ -853,7 +853,7 @@
                     },
                     {
                         "id": "pmannikumaki4",
-                        "ingredient": "meat",
+                        "ingredient": "seasoning",
                         "method": "stir",
                         "time": 120,
                         "condition": [
@@ -885,33 +885,42 @@
                 "procedure": [
                     {
                         "id": "kareimunieru1",
-                        "ingredient": "vegetable",
-                        "method": "leave",
-                        "time": 600,
+                        "ingredient": "meat",
+                        "method": "mix",
+                        "time": 60,
                         "condition": null,
                         "previous": null,
-                        "text": "カレイの水分を拭き取る。両面に塩こしょうを振り、10分くらいなじませてから小麦粉を両面に付ける。"
+                        "text": "カレイの水分を拭き取る。"
                     },
                     {
                         "id": "kareimunieru2",
                         "ingredient": "meat",
-                        "method": "stir",
-                        "time": 180,
-                        "condition": [
-                            "kareimunieru1"
-                        ],
-                        "previous": null,
-                        "text": "フライパンにバターを溶かして、弱めの中火で3分焼く。"
+                        "method": "leave",
+                        "time": 600,
+                        "condition": ["kareimunieru1"],
+                        "previous": "kareimunieru1",
+                        "text": "両面に塩こしょうを振り、10分くらいなじませてから小麦粉を両面に付ける。"
                     },
                     {
                         "id": "kareimunieru3",
                         "ingredient": "meat",
                         "method": "stir",
-                        "time": 270,
+                        "time": 180,
                         "condition": [
                             "kareimunieru2"
                         ],
-                        "previous": "kareimunieru2",
+                        "previous": null,
+                        "text": "フライパンにバターを溶かして、弱めの中火で3分焼く。"
+                    },
+                    {
+                        "id": "kareimunieru4",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 270,
+                        "condition": [
+                            "kareimunieru3"
+                        ],
+                        "previous": "kareimunieru3",
                         "text": "フライ返しで裏面に返して、蓋をして弱火で4〜5分焼く。焼く時間は魚の厚さにより調整してください。"
                     }
                 ]
