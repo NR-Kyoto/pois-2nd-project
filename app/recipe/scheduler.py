@@ -38,6 +38,7 @@ class Schedule:
     # self.resources_status : 各リソースの最後の状態．リソースをキー，状態を値とした辞書
     # self.finish_time      : スケジュールの終了時間
     # self.task_timing      : 各タスクの開始時間・終了時間．（時間，タスク，'start' | 'end'）のリスト
+    # self.score            : スケジュールのスコア
 
     def __init__(self, user):
         
@@ -76,6 +77,9 @@ class Schedule:
         
         # 各作業の開始と修了
         self.task_timing = []
+
+        # スケジュールの優劣を決めるスコア
+        self.score = -1.0
 
     # タスクを追加する
     def addTask(self, add_task, use_resources):
@@ -188,7 +192,7 @@ class Schedule:
             else:
 
                 # 終了時間が速い順にソート？
-                # tmp.sort(key=lambda x: self.getResourceFinalTime(x))
+                tmp.sort(key=lambda x: self.getResourceFinalTime(x))
                 
                 status = [self.resources_status.get(x) for x in tmp]
 
@@ -252,8 +256,20 @@ class Schedule:
         ft.append((start, sys.maxsize))
 
         # 間が0秒でないものを返す
-        tmp = [(st, end) for st, end in ft if st != end]
+        tmp = [(st, end) for st, end in ft if st < end]
         return tmp
+
+    
+    def setScheduleScore(self, last_nodes):
+
+        score = 0
+        # 洗い物のまとまり具合
+
+        # 最終工程が最後の方にあるのか？
+        leave_time = [self.finish_time - time for time, task, status in self.task_timing if (task.task_id in last_nodes) and (status == "end") and (task.method in ["stir", "stew"])]
+        score += 1 / (1 + sum(leave_time))
+
+        self.score = score
 
     # スケジュールをJSONに変換
     def getJson(self):
@@ -597,22 +613,22 @@ class RecipeScheduler:
                     return
 
         else:
+
             self.addCleanUpTask(P) # 最後の洗い物を行う
 
-            # global counter
-            # counter += 1
-            # mem = psutil.virtual_memory() 
-
-            # print("counter : %d (%f) %dsec" % (counter, mem.used, P.finish_time))
-
             # より優れたスケジュールなら入れ替え
-            if P.finish_time < self.optimal_schedule.finish_time: 
+            if P.finish_time < self.optimal_schedule.finish_time + 60:
                 
-                global counter
-                counter += 1
-                print("counter : %d (%d sec)" % (counter, P.finish_time))
-                self.optimal_schedule = copy.deepcopy(P)
-                self.optimal_schedule.plotSchedule()
+                # スコア算出
+                P.setScheduleScore(list(self.recipe_graph.predecessors(1)))
+
+                if P.score > self.optimal_schedule.score:
+                
+                    global counter
+                    counter += 1
+                    print("counter : %d (%d sec)" % (counter, P.finish_time))
+                    self.optimal_schedule = copy.deepcopy(P)
+                    self.optimal_schedule.plotSchedule()
 
     # 枝刈りをするかどうか
     def isBounded(self, P, S):
@@ -681,17 +697,21 @@ class RecipeScheduler:
         valid_time = []
         span = []
         for st, end in user_ft:
-            if st > final_time and end - st > wt:
-                valid_time.append((st, end))
-                span.append(end - st)
+            if st > final_time:
+                if end - st > wt:
+                    valid_time.append((st, end))
+                    span.append(end - st)
 
-            elif end > final_time and end - final_time > wt:
-                valid_time.append((final_time, end))
-                span.append(end - final_time)
+            elif end > final_time:
+                if end - final_time > wt:
+                    valid_time.append((final_time, end))
+                    span.append(end - final_time)
 
         # 利用可能な空き時間のうち最も短いところで洗う
         best_index = span.index(min(span))
         schedule.insertWash(valid_time[best_index][0], self.wash_tasks.get(resource))
+
+
 
 # if __name__ == "__main__":
     
