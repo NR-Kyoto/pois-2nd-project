@@ -161,12 +161,17 @@ class Schedule:
             
             # 直前調理とリソースがかぶっている場合は流用
             if task.previous and (resource in task.previous.resources):
-                assigned += [x for x in self.resources 
-                    if (resource in x) and 
-                    (self.schedule.get(x)) and 
-                    (self.schedule.get(x)[-1][1].task_id == task.previous.task_id)
-                ]
-                continue
+                
+                candidate = [x for x in self.resources if resource in x]
+
+                tmp = None
+                for x in candidate:
+                    if len(self.schedule.get(x)) > 0 and self.schedule.get(x)[-1][1].task_id == task.previous.task_id:
+                        tmp = x
+
+                if tmp:
+                    assigned.append(tmp)
+                    continue
             
             # ユーザが所持しているリソースのうちタスクで使用するリソース
             tmp = [x for x in self.resources if resource in x]
@@ -183,7 +188,7 @@ class Schedule:
             else:
 
                 # 終了時間が速い順にソート？
-                tmp.sort(key=lambda x: self.getResourceFinalTime(x))
+                # tmp.sort(key=lambda x: self.getResourceFinalTime(x))
                 
                 status = [self.resources_status.get(x) for x in tmp]
 
@@ -194,10 +199,9 @@ class Schedule:
 
                 # 優先順位２：洗い物不要
                 checklist = [Schedule.checkNecessityWash(x, task.status) for x in status]
-                if True in checklist:
-                    assigned.append(tmp[checklist.index(True)])
+                if False in checklist:
+                    assigned.append(tmp[checklist.index(False)])
                     continue
-             
 
                 # 優先順位３：洗い物必要
                 # 使い終わるのが早い順に割り当てる
@@ -363,8 +367,12 @@ class Task:
 
             elif self.method == 'leave':
                 self.resources = self.previous.resources.copy()
+
                 if 'user' in self.resources:
                     self.resources.remove('user')
+
+                if 'knife' in self.resources:
+                    self.resources.remove('knife')
 
             else:
                 self.resources = Task.method_to_resource.get(self.method).copy()
