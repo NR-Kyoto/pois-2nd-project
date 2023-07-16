@@ -10,10 +10,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Dish(models.Model):
     dish_id = models.AutoField(primary_key=True)
     dish_name = models.CharField(max_length = 50)
+    image = models.CharField(
+            max_length = 100,
+            default="static/app/dish_images/no_image.jpg"
+        )
+    
     manual = models.JSONField()
 
     def __str__(self):
         return self.dish_name + "(" + str(self.dish_id) + ")"
+    def get_image_url(self) -> str:
+        return self.image
 
 class Menu(models.Model):
     menu_id = models.AutoField(primary_key=True)
@@ -70,7 +77,3 @@ class CookingTool(models.Model):
             default=0,
             validators=[MinValueValidator(0), MaxValueValidator(100)]
         )
-    
-    
-
-

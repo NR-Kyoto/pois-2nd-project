@@ -1,15 +1,16 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
+from django.contrib.auth import get_user_model
 
 from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
-
+from rest_framework.views import APIView
 from .scheduler import RecipeScheduler
 
 from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
 from app.recommend.models import RecipeGraph
 
-from rest_framework.views import APIView
+import json
 
 class MergeRecipes(APIView):
     
@@ -37,10 +38,13 @@ class MergeRecipes(APIView):
             print(e)
             return Response({"error": "cannot make scheduler"}, status=HTTP_406_NOT_ACCEPTABLE)
 
-from django.http import HttpResponse, HttpRequest
-from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
-from app.recommend.models import RecipeGraph
-import json
+def check_is_authenticated(func):
+    '''ユーザの認証チェック'''
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=HTTP_401_UNAUTHORIZED)
+        func(request, *args, **kwargs)
+    return wrapper
 
 def cal_total_time(dish_id: int) -> int:
     '''
@@ -69,19 +73,26 @@ def get_recipe_procedure(dish_id: int) -> list[str]:
         print(e)
         return [""]
 
-def get_dish_info(dish: Dish) -> dict:
+def get_host_url(request: HttpRequest) -> str:
+    return "http://" + request.META.get("HTTP_HOST")
+
+def get_dish_image_url(dish: Dish, hosturl: str) -> str:
+    url = dish.get_image_url()
+    return hosturl + "/"+ url
+
+def get_dish_info(dish: Dish, hosturl) -> dict:
     d = {}
     d["id"] = dish.dish_id
     d["dish_name"] = dish.dish_name
     d["time"] = cal_total_time(dish.dish_id)
     d["ingredient"] = dish.manual["ingredient"]
-    d["img_name"] = ""
+    d["img_url"] = get_dish_image_url(dish, hosturl)
     return d
 
-def get_dish_detail_info(dish_id) -> dict:
+def get_dish_detail_info(dish_id, hosturl) -> dict:
     try:
         dish = Dish.objects.get(dish_id=dish_id)
-        d = get_dish_info(dish)
+        d = get_dish_info(dish, hosturl)
         d["procedure"] = get_recipe_procedure(dish_id)
         return d
     except:
@@ -139,7 +150,7 @@ def get_menu_history(request) -> list:
         
     return history_list
 
-def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
+def make_or_update_cookingtool_info(request, tool_info_input:dict=None) -> None:
     '''
     ユーザの調理器具の情報を更新する関数
     tool_info = {
@@ -151,8 +162,11 @@ def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
         "stove" : int #コンロ
     }
     '''
-    if tool_info is None:
-        tool_info = {"kitchen_knife":0, "cutting_board":0, "flying_pan":0, "sauce_pan":0, "bowl":0, "stove":0}
+    tool_info = {"kitchen_knife":0, "cutting_board":0, "flying_pan":0,
+                "sauce_pan":0, "bowl":0, "stove":0}
+    if type(tool_info) is dict:
+        tool_info.update(tool_info_input)
+
     obj, is_created = CookingTool.objects.get_or_create(user=request.user)
     obj.kitchen_knife = tool_info["kitchen_knife"]
     obj.cutting_board = tool_info["cutting_board"]
@@ -160,6 +174,9 @@ def make_or_update_cookingtool_info(request, tool_info:dict=None) -> None:
     obj.sauce_pan = tool_info["sauce_pan"]
     obj.bowl = tool_info["bowl"]
     obj.stove = tool_info["stove"]
+    obj.save()
+    return HttpResponse(json.dumps({"result": "Success"}, ensure_ascii=False))
+
 def regist_menu(request: HttpRequest) -> HttpResponse:
 
     if request.method == 'POST':
@@ -178,27 +195,54 @@ def search_dish(request: HttpRequest) -> HttpResponse:
     '''
     入力された文字列から部分マッチする料理を検索する
     '''
-    body = json.loads(request.body)
-    dishes = Dish.objects.filter(name__contains=body["search_str"]).values_list("dish_name")
-    out = [get_dish_info(dish) for dish in dishes]
-    out = json.dumps(out, ensure_ascii=False)
+    if request.method == 'POST':
 
-    return HttpResponse(out)
+        try:
+            body = json.loads(request.body)
+            hosturl = get_host_url(request)
+            dishes = Dish.objects.filter(name__contains=body["search_str"]).values_list("dish_name")
+            out = [get_dish_info(dish, hosturl) for dish in dishes]
+            out = json.dumps(out, ensure_ascii=False)
+            return HttpResponse(out)
+        except Exception as e:
+            print(e)
+            return HttpResponse({'error':'cannot get dishes'})
+
+    return HttpResponse('POST ONLY')
 
 def show_dish_info(request: HttpRequest) -> HttpResponse:
 
     if request.method == "POST":
         print(request.body)
         body = json.loads(request.body)
-        d = get_dish_detail_info(body["id"])
+        d = get_dish_detail_info(body["id"], get_host_url(request))
         return HttpResponse(json.dumps(d, ensure_ascii=False))
     
     return HttpResponse('POST ONLY')
 
 def regist_cookingtool_info(request: HttpRequest) -> HttpResponse:
+    '''
+    ユーザの調理器具に関する情報を登録する
+    全部まとめての登録だけではなく、一つ一つ指定して登録することも可能
+    (例) request.body = {"bowl":0}
+    '''
     body = json.loads(request.body)
     make_or_update_cookingtool_info(request, body)
+    return HttpResponse(json.dumps({"result": "Success"}, ensure_ascii=False))
 
 def show_menu_history(request) -> HttpResponse:
     l = get_menu_history(request)
     return HttpResponse(json.dumps(l, ensure_ascii=False))
+
+def get_dish_image_url_response(request: HttpRequest) -> HttpResponse:
+    '''
+    入力データ e.x.{"id" : 2} を受け取り、料理の写真のURLを返す
+    '''
+    body = json.loads(request.body)
+    try:
+        dish = Dish.objects.get(dish_id=body["id"])
+        url = get_dish_image_url(dish, get_host_url(request))
+        return HttpResponse({'url':url})
+    except Exception as e:
+        print(e)
+        return HttpResponse({'error':'cannot get dish_image url'})

@@ -9,11 +9,15 @@ Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查�
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
+from . import settings
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.login.urls')),
     path('recipe/', include('app.recipe.urls')),
     path('recommend/', include('app.recommend.urls')),
-    path('merge/', include('app.recipe.urls'))
 ]
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
