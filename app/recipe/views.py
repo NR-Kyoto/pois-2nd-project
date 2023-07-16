@@ -150,6 +150,12 @@ def get_menu_history(request) -> list:
         
     return history_list
 
+def get_cookingtool_info(user) -> dict:
+    obj, is_created = CookingTool.objects.get_or_create(user=user)
+    tool_info = {"kitchen_knife":obj.kitchen_knife, "cutting_board":obj.cutting_board, "flying_pan":obj.flying_pan,
+                "sauce_pan":obj.sauce_pan, "bowl":obj.bowl, "stove":obj.stove}
+    return tool_info
+
 def make_or_update_cookingtool_info(request, tool_info_input:dict=None) -> None:
     '''
     ユーザの調理器具の情報を更新する関数
@@ -162,12 +168,11 @@ def make_or_update_cookingtool_info(request, tool_info_input:dict=None) -> None:
         "stove" : int #コンロ
     }
     '''
-    tool_info = {"kitchen_knife":0, "cutting_board":0, "flying_pan":0,
-                "sauce_pan":0, "bowl":0, "stove":0}
+    obj, is_created = CookingTool.objects.get_or_create(user=request.user) # デフォルトは全部 0
+    tool_info = get_cookingtool_info(request.user)
     if type(tool_info) is dict:
         tool_info.update(tool_info_input)
-
-    obj, is_created = CookingTool.objects.get_or_create(user=request.user)
+    
     obj.kitchen_knife = tool_info["kitchen_knife"]
     obj.cutting_board = tool_info["cutting_board"]
     obj.flying_pan = tool_info["flying_pan"]
@@ -229,6 +234,12 @@ def regist_cookingtool_info(request: HttpRequest) -> HttpResponse:
     body = json.loads(request.body)
     make_or_update_cookingtool_info(request, body)
     return HttpResponse(json.dumps({"result": "Success"}, ensure_ascii=False))
+
+def show_cookingtool_info(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        tool_info = get_cookingtool_info(request.user)
+        return HttpResponse(json.dumps(tool_info, ensure_ascii=False))
+    return HttpResponse('POST ONLY')
 
 def show_menu_history(request) -> HttpResponse:
     l = get_menu_history(request)
