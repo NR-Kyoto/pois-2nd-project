@@ -1,0 +1,930 @@
+[
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "鯖の塩焼き",
+            "manual": {
+                "ingredient": {
+                    "鯖": {
+                        "amount": 1,
+                        "unit": "切れ"
+                    },
+                    "塩": {
+                        "amount": 1,
+                        "unit": "つまみ"
+                    },
+                    "大根": {
+                        "amount": 150,
+                        "unit": "g"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "grillsaba1",
+                        "ingredient": "vegetable",
+                        "method": "mix",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "大根はすりおろし、軽く水気を切る。"
+                    },
+                    {
+                        "id": "grillsaba2",
+                        "ingredient": "meat",
+                        "method": "cut",
+                        "time": 120,
+                        "condition": null,
+                        "previous": null,
+                        "text": "サバは皮面に浅く2cm幅に切れ目を入れる。全体に薄く塩をふる。"
+                    },
+                    {
+                        "id": "grillsaba3",
+                        "ingredient": "seasoning",
+                        "method": "leave",
+                        "time": 900,
+                        "condition": ["grillsaba2"],
+                        "previous": "grillsaba2",
+                        "text": "10〜15分ほどおき、キッチンペーパーで水気をふき取る。再度、塩を全体にふる。"
+                    },
+                    {
+                        "id": "grillsaba4",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 600,
+                        "condition": ["grillsaba3"],
+                        "previous": null,
+                        "text": "フライパンにサラダ油を入れて熱し、サバの皮目を下にして入れて、皮目に焼き色がつくまで中火で4~5分焼く。裏返して、弱火で4~5分焼く。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "春雨サラダ",
+            "manual": {
+                "ingredient": {
+                    "春雨": {
+                        "amount": 40,
+                        "unit": "g"
+                    },
+                    "きゅうり": {
+                        "amount": 0.5,
+                        "unit": "本"
+                    },
+                    "たまご": {
+                        "amount": 1,
+                        "unit": "個"
+                    },
+                    "ハム": {
+                        "amount": 4,
+                        "unit": "枚"
+                    }
+
+                },
+                "procedure": [
+                    {
+                        "id": "vermicellisalad1",
+                        "ingredient": "vegetable",
+                        "method": "stir",
+                        "time": 150,
+                        "condition": null,
+                        "previous": null,
+                        "text": "たまごを割って、フライパン等で焼く"
+                    },
+                    {
+                        "id": "vermicellisalad2",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": "240",
+                        "condition": null,
+                        "previous": null,
+                        "text": "きゅうり、ハム、薄焼き卵を千切りにする。お好みに合わせて春雨も食べやすい長さに切る。"
+                    },
+                    {
+                        "id": "vermicellisalad3",
+                        "ingredient": "seasoning",
+                        "method": "mix",
+                        "time": 90,
+                        "condition": null,
+                        "previous": null,
+                        "text": "醤油、酢、砂糖、ごま油、鶏がらスープ等の調味料を合わせる"
+                    },
+                    {
+                        "id": "vermicellisalad4",
+                        "ingredient": "seasoning",
+                        "method": "mix",
+                        "time": 120,
+                        "condition": ["vermicellisalad2", "vermicellisalad3"],
+                        "previous": null,
+                        "text": "具材と調味料をよく混ぜ合わせる。"
+                    },
+                    {
+                        "id": "vermicellisalad5",
+                        "ingredient": "seasoning",
+                        "method": "leave",
+                        "time": 300,
+                        "condition": ["vermicellisalad4"],
+                        "previous": "vermicellisalad4",
+                        "text": "食べるまで冷蔵庫に置いて冷やしておこう。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "味噌汁",
+            "manual": {
+                "ingredient": {
+                    "油揚げ": {
+                        "amount": 0.5,
+                        "unit": "枚"
+                    },
+                    "玉ねぎ": {
+                        "amount": 0.25,
+                        "unit": "個"
+                    },
+                    "水": {
+                        "amount": 150,
+                        "unit": "ml"
+                    },
+                    "顆粒出汁": {
+                        "amount": 0.5,
+                        "unit": "小さじ"
+                    },
+                    "みそ": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "misosoup1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 120,
+                        "condition": null,
+                        "previous": null,
+                        "text": "油揚げは、3等分に切り1cm幅に切ります。玉ねぎは繊維方向に5mm幅の薄切りにします。"
+                    },
+                    {
+                        "id": "misosoup2",
+                        "ingredient": "vegetable",
+                        "method": "stew",
+                        "time": 300,
+                        "condition": ["misosoup1"],
+                        "previous": null,
+                        "text": "鍋に水、顆粒和風だし、1を入れ中火で加熱します。"
+                    },
+                    {
+                        "id": "misosoup3",
+                        "ingredient": "seasoning",
+                        "method": "stew",
+                        "time": 120,
+                        "condition": ["misosoup2"],
+                        "previous": "misosoup2",
+                        "text": "玉ねぎが柔らかくなったら、みそを溶かしいれひと煮立ちさせ火から下ろします。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "豚の生姜焼き",
+            "manual": {
+                "ingredient": {
+                    "豚ロース": {
+                        "amount": 150,
+                        "unit": "g"
+                    },
+                    "薄力粉": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "すりおろしショウガ": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "しょうゆ": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "砂糖": {
+                        "amount": 0.5,
+                        "unit": "大さじ"
+                    },
+                    "酒": {
+                        "amount": 0.5,
+                        "unit": "大さじ"
+                    },
+                    "ごま油": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "キャベツ": {
+                        "amount": 150,
+                        "unit": "g"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "gingerpork1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "キャベツは千切りにします。。"
+                    },
+                    {
+                        "id": "gingerpork2",
+                        "ingredient": "meat",
+                        "method": "mix",
+                        "time": 120,
+                        "condition": null,
+                        "previous": null,
+                        "text": "豚ロースに薄力粉をまぶします。"
+                    },
+                    {
+                        "id": "gingerpork3",
+                        "ingredient": "seasoning",
+                        "method": "mix",
+                        "time": 60,
+                        "condition": null,
+                        "previous": null,
+                        "text": "ボウルにたれの材料（すりおろしショウガ，醤油，砂糖，酒）を入れて混ぜ合わせます。"
+                    },
+                    {
+                        "id": "gingerpork4",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 300,
+                        "condition": ["gingerpork3"],
+                        "previous": "gingerpork3",
+                        "text": "中火で熱したフライパンにごま油をひき、豚ロースを焼きます。火が通り、両面にこんがりと焼き色が付いたらたれを入れます。"
+                    },
+                    {
+                        "id": "gingerpork5",
+                        "ingredient": "seasoning",
+                        "method": "stir",
+                        "time": 300,
+                        "condition": ["gingerpork4"],
+                        "previous": "gingerpork4",
+                        "text": "火が通り、両面にこんがりと焼き色が付いたらたれを入れます。中火で炒め合わせ、全体に味がなじんだら火から下ろします。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "カレーライス",
+            "manual": {
+                "ingredient": {
+                    "豚肉": {
+                        "amount": 80,
+                        "unit": "g"
+                    },
+                    "玉ねぎ": {
+                        "amount": 0.45,
+                        "unit": "個"
+                    },
+                    "人参": {
+                        "amount": 0.45,
+                        "unit": "本"
+                    },
+                    "ジャガイモ": {
+                        "amount": 1,
+                        "unit": "個"
+                    },
+                    "ニンニク": {
+                        "amount": 0.5,
+                        "unit": "小さじ"
+                    },
+                    "水": {
+                        "amount": 200,
+                        "unit": "g"
+                    },
+                    "カレールウ": {
+                        "amount": 1,
+                        "unit": "個"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "curry1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "玉ねぎは食べやすい大きさに切る。にんじんは縦半分に切り、切り口を下にして5mm幅に切る。じゃがいもは食べやすい大きさに切り、水にさらして水気を切る。"
+                    },
+                    {
+                        "id": "curry2",
+                        "ingredient": "meat",
+                        "method": "stew",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "鍋にサラダ油を入れて熱し、豚肉、にんにくを入れて中火で肉の色が変わるまで炒める。"
+                    },
+                    {
+                        "id": "curry3",
+                        "ingredient": "meat",
+                        "method": "stew",
+                        "time": 1200,
+                        "condition": ["curry2"],
+                        "previous": "curry2",
+                        "text": "玉ねぎ、にんじん、じゃがいもを加えて油が回るまで炒める。水を加えて煮立ったらふたをし、じゃがいもがやわらかくなるまで弱火で15分程煮る。"
+                    },
+                    {
+                        "id": "curry4",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 300,
+                        "condition": ["curry3"],
+                        "previous": "curry3",
+                        "text": "火を止めてルウを加え、溶けるまで混ぜる。再び弱火で熱し、とろみがつくまで混ぜながら5分程煮る。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "サラダ",
+            "manual": {
+                "ingredient": {
+                    "レタス": {
+                        "amount": 2,
+                        "unit": "枚"
+                    },
+                    "卵": {
+                        "amount": 1,
+                        "unit": "個"
+                    },
+                    "トマト": {
+                        "amount": 1,
+                        "unit": "個"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "salad1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "レタスとトマトを洗い、一口大に切る。"
+                    },
+                    {
+                        "id": "salad2",
+                        "ingredient": "meat",
+                        "method": "stew",
+                        "time": 600,
+                        "condition": null,
+                        "previous": null,
+                        "text": "卵と卵にかぶる程度の水を鍋に入れ、10分程度ゆでる。"
+                    },
+                    {
+                        "id": "salad3",
+                        "ingredient": "meat",
+                        "method": "leave",
+                        "time": 300,
+                        "condition": ["salad2"],
+                        "previous": "salad2",
+                        "text": "卵を5分ほど水にさらして冷ます。"
+                    },
+                    {
+                        "id": "salad4",
+                        "ingredient": "meat",
+                        "method": "cut",
+                        "time": 60,
+                        "condition": ["salad3"],
+                        "previous": null,
+                        "text": "卵を切り、レタス、トマトとお皿に盛り付ける。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "うどん",
+            "manual": {
+                "ingredient": {
+                    "うどん": {
+                        "amount": 1,
+                        "unit": "玉"
+                    },
+                    "牛こま": {
+                        "amount": 100,
+                        "unit": "g"
+                    },
+                    "ショウガ": {
+                        "amount": 1,
+                        "unit": "かけ"
+                    },
+                    "酒": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "砂糖": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "みりん": {
+                        "amount": 2,
+                        "unit": "大さじ"
+                    },
+                    "醤油": {
+                        "amount": 2,
+                        "unit": "大さじ"
+                    },
+                    "水": {
+                        "amount": 250,
+                        "unit": "ml"
+                    },
+                    "顆粒だし": {
+                        "amount": 0.5,
+                        "unit": "大さじ"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "udon1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "生姜は皮を剥き、千切りにしておきます。"
+                    },
+                    {
+                        "id": "udon2",
+                        "ingredient": "vegetable",
+                        "method": "stir",
+                        "time": 180,
+                        "condition": ["udon1"],
+                        "previous": null,
+                        "text": "フライパンにサラダ油をひき中火に熱し、生姜を炒めます。"
+                    },
+                    {
+                        "id": "udon3",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 300,
+                        "condition": ["udon2"],
+                        "previous": "udon2",
+                        "text": "香りが立ったら牛こま切れ肉を加え、炒めます。色が変わってきたら酒、砂糖、みりん、醤油を加え、肉に火が通ったら火から下ろします。"
+                    },
+                    {
+                        "id": "udon4",
+                        "ingredient": "vegetable",
+                        "method": "stew",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "鍋に水、顆粒だし、醤油、みりんを混ぜ合わせ、中火にかけ沸騰させます。"
+                    },
+                    {
+                        "id": "udon5",
+                        "ingredient": "vegetable",
+                        "method": "stew",
+                        "time": 180,
+                        "condition": ["udon4"],
+                        "previous": "udon4",
+                        "text": "うどんを入れ、2分間ゆでます。"
+                    },
+                    {
+                        "id": "udon6",
+                        "ingredient": "seasoning",
+                        "method": "stew",
+                        "time": 60,
+                        "condition": ["udon3", "udon5"],
+                        "previous": "udon5",
+                        "text": "うどんを器に移し、肉を上に盛り付けます。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "ハンバーガー",
+            "manual": {
+                "ingredient": {
+                    "合いびき肉": {
+                        "amount": 120,
+                        "unit": "g"
+                    },
+                    "玉ねぎ": {
+                        "amount": 0.5,
+                        "unit": "個"
+                    },
+                    "パン粉": {
+                        "amount": 2,
+                        "unit": "大さじ"
+                    },
+                    "牛乳": {
+                        "amount": 2,
+                        "unit": "大さじ"
+                    },
+                    "おろしにんにく": {
+                        "amount": 0.5,
+                        "unit": "かけ分"
+                    },
+                    "塩": {
+                        "amount": 1,
+                        "unit": "つまみ"
+                    },
+                    "砂糖": {
+                        "amount": 0.25,
+                        "unit": "小さじ"
+                    },
+                    "こしょう": {
+                        "amount": 1,
+                        "unit": "つまみ"
+                    },
+                    "ケチャップ": {
+                        "amount": 1.5,
+                        "unit": "大さじ"
+                    },
+                    "ウスターソース": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "醤油": {
+                        "amount": 0.5,
+                        "unit": "大さじ"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "hamburger1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 60,
+                        "condition": null,
+                        "previous": null,
+                        "text": "玉ねぎをみじん切りにします。"
+                    },
+                    {
+                        "id": "hamburger2",
+                        "ingredient": "vegetable",
+                        "method": "stir",
+                        "time": 540,
+                        "condition": ["hamburger1"],
+                        "previous": null,
+                        "text": "フライパンにサラダ油を入れて強めの中火で熱し、玉ねぎを加えます。軽く色づいてきたら、弱めの中火に火加減を落とし、合計8〜9分ほどじっくり炒めて甘みを引き出しましょう。"
+                    },
+                    {
+                        "id": "hamburger3",
+                        "ingredient": "vegetable",
+                        "method": "leave",
+                        "time": 300,
+                        "condition": ["hamburger2"],
+                        "previous": "hamburger2",
+                        "text": "玉ねぎの粗熱をとります。"
+                    },
+                    {
+                        "id": "hamburger4",
+                        "ingredient": "meat",
+                        "method": "mix",
+                        "time": 120,
+                        "condition": ["hamburger3"],
+                        "previous": null,
+                        "text": "ひき肉と冷ました玉ねぎ、パン粉、牛乳、塩、砂糖、おろしにんにく、コショウをボウルに入れます。"
+                    },
+                    {
+                        "id": "hamburger5",
+                        "ingredient": "meat",
+                        "method": "mix",
+                        "time": 180,
+                        "condition": ["hamburger4"],
+                        "previous": "hamburger4",
+                        "text": "手でしっかり材料を練り混ぜ、ハンバーグのタネを作ります。"
+                    },
+                    {
+                        "id": "hamburger6",
+                        "ingredient": "meat",
+                        "method": "other",
+                        "time": 300,
+                        "condition": ["hamburger5"],
+                        "previous": "hamburger5",
+                        "text": "作る個数にざっくりとボウルの中で切り分け、手に取って成形していきます。"
+                    },
+                    {
+                        "id": "hamburger7",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 600,
+                        "condition": ["hamburger6"],
+                        "previous": null,
+                        "text": "まず片面に焼き色を付けた後、火加減は弱火を少し強くしたくらいにして2〜3分ほど焼きます。裏返したら弱火にして、蓋をして7〜9分ほどじっくり蒸し焼きにします。"
+                    },
+                    {
+                        "id": "hamburger8",
+                        "ingredient": "seasoning",
+                        "method": "stir",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "フライパンにケチャップ、ウスターソース、醤油を合わせ、フライパンを火にかけ、混ぜながら軽く煮詰めてソースを作ります。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "コンソメスープ",
+            "manual": {
+                "ingredient": {
+                    "キャベツ": {
+                        "amount": 1,
+                        "unit": "枚"
+                    },
+                    "じゃがいも": {
+                        "amount": 1,
+                        "unit": "個"
+                    },
+                    "にんじん": {
+                        "amount": 0.25,
+                        "unit": "個"
+                    },
+                    "玉ねぎ": {
+                        "amount": 0.25,
+                        "unit": "個"
+                    },
+                    "ソーセージ": {
+                        "amount": 2,
+                        "unit": "本"
+                    },
+                    "水": {
+                        "amount": 1,
+                        "unit": "カップ"
+                    },
+                    "コンソメ": {
+                        "amount": 1,
+                        "unit": "小さじ"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "soup1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 300,
+                        "condition": null,
+                        "previous": null,
+                        "text": "キャベツは葉をひと口大にちぎり、芯は薄切りにします。じゃがいもはひと口大に切ります。にんじんは乱切りにします。玉ねぎは薄切りにします。"
+                    },
+                    {
+                        "id": "soup2",
+                        "ingredient": "meat",
+                        "method": "cut",
+                        "time": 60,
+                        "condition": null,
+                        "previous": null,
+                        "text": "ソーセージは長さを４等分に切ります。"
+                    },
+                    {
+                        "id": "soup3",
+                        "ingredient": "vegetable",
+                        "method": "stew",
+                        "time": 480,
+                        "condition": ["soup1", "soup2"],
+                        "previous": null,
+                        "text": "鍋に水とコンソメ、じゃがいも・にんじん・玉ねぎを入れて火にかけ、フタをして７～８分ほど煮ます。"
+                    },
+                    {
+                        "id": "soup4",
+                        "ingredient": "meat",
+                        "method": "stew",
+                        "time": 480,
+                        "condition": ["soup3"],
+                        "previous": "soup3",
+                        "text": "キャベツ・ソーセージを加え、７～８分煮て、塩・こしょうで味を調えます。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "たまごやき",
+            "manual": {
+                "ingredient": {
+                    "卵": {
+                        "amount": 2,
+                        "unit": "個"
+                    },
+                    "砂糖": {
+                        "amount": 1,
+                        "unit": "小さじ"
+                    },
+                    "醤油": {
+                        "amount": 0.5,
+                        "unit": "小さじ"
+                    },
+                    "塩": {
+                        "amount": 1,
+                        "unit": "つまみ"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "rolledomelet1",
+                        "ingredient": "meat",
+                        "method": "mix",
+                        "time": 180,
+                        "condition": null,
+                        "previous": null,
+                        "text": "ボウルに卵を割り入れ、箸で卵白を切るように溶く。各調味料を加えて混ぜ合わせる。"
+                    },
+                    {
+                        "id": "rolledomelet2",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 60,
+                        "condition": ["rolledomelet1"],
+                        "previous": null,
+                        "text": "卵焼き器を中火にかけ、油を含んだキッチンペーパーで油をなじませる。かすかに煙が出るくらいまで中火で熱する。"
+                    },
+                    {
+                        "id": "rolledomelet3",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 300,
+                        "condition": ["rolledomelet2"],
+                        "previous": "rolledomelet2",
+                        "text": "中火のままで、1/3の量の卵液を流し入れ全体に広げる。気泡ができたら菜箸でつぶし、半熟状になったら奥から手前に卵を巻く。巻き終わったら奥にずらし、油を塗る。また卵液を入れて繰り返す。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "ピーマンの肉巻き",
+            "manual": {
+                "ingredient": {
+                    "豚バラ肉": {
+                        "amount": 10,
+                        "unit": "枚"
+                    },
+                    "ピーマン": {
+                        "amount": 5,
+                        "unit": "個"
+                    },
+                    "砂糖": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "醤油": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "みりん": {
+                        "amount": 1,
+                        "unit": "大さじ"
+                    },
+                    "ニンニクチューブ": {
+                        "amount": 1.5,
+                        "unit": "cm"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "pmannikumaki1",
+                        "ingredient": "vegetable",
+                        "method": "cut",
+                        "time": 40,
+                        "condition": null,
+                        "previous": null,
+                        "text": "ピーマンは縦半分に切り、種を取る。"
+                    },
+                    {
+                        "id": "pmannikumaki2",
+                        "ingredient": "meat",
+                        "method": "other",
+                        "time": 60,
+                        "condition": [
+                            "pmannikumaki1"
+                        ],
+                        "previous": "pmannikumaki1",
+                        "text": "豚肉を広げたところにピーマンをのせてピーマン自体をキュッと丸めながらお肉をくるくると巻いていく。折れても気にしない。"
+                    },
+                    {
+                        "id": "pmannikumaki3",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 150,
+                        "condition": [
+                            "pmannikumaki2"
+                        ],
+                        "previous": null,
+                        "text": "巻き終わりを下にしてフライパンに入れ（油は不要）しっかりとじ目がくっつくまで焼いたら転がしながらお肉全体に火を通す。"
+                    },
+                    {
+                        "id": "pmannikumaki4",
+                        "ingredient": "seasoning",
+                        "method": "stir",
+                        "time": 120,
+                        "condition": [
+                            "pmannikumaki3"
+                        ],
+                        "previous": "pmannikumaki3",
+                        "text": "調味料を回し入れ、少し煮詰めてお肉によくからんだら火を止める。"
+                    }
+                ]
+            }
+        }
+    },
+
+    {
+        "model": "recipe.Dish",
+        "fields":{
+            "dish_name": "カレイのムニエル",
+            "manual": {
+                "ingredient": {
+                    "カレイ": {
+                        "amount": 1,
+                        "unit": "切れ"
+                    },
+                    "バター": {
+                        "amount": 5,
+                        "unit": "g"
+                    }
+                },
+                "procedure": [
+                    {
+                        "id": "kareimunieru1",
+                        "ingredient": "meat",
+                        "method": "mix",
+                        "time": 60,
+                        "condition": null,
+                        "previous": null,
+                        "text": "カレイの水分を拭き取る。"
+                    },
+                    {
+                        "id": "kareimunieru2",
+                        "ingredient": "meat",
+                        "method": "leave",
+                        "time": 600,
+                        "condition": ["kareimunieru1"],
+                        "previous": "kareimunieru1",
+                        "text": "両面に塩こしょうを振り、10分くらいなじませてから小麦粉を両面に付ける。"
+                    },
+                    {
+                        "id": "kareimunieru3",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 180,
+                        "condition": [
+                            "kareimunieru2"
+                        ],
+                        "previous": null,
+                        "text": "フライパンにバターを溶かして、弱めの中火で3分焼く。"
+                    },
+                    {
+                        "id": "kareimunieru4",
+                        "ingredient": "meat",
+                        "method": "stir",
+                        "time": 270,
+                        "condition": [
+                            "kareimunieru3"
+                        ],
+                        "previous": "kareimunieru3",
+                        "text": "フライ返しで裏面に返して、蓋をして弱火で4〜5分焼く。焼く時間は魚の厚さにより調整してください。"
+                    }
+                ]
+            }
+        }
+    }
+]
