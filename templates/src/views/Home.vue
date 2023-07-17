@@ -39,7 +39,7 @@
             <h2 class="text-h4 font-weight-bold pb-4">Recommended For You</h2>
 
             <v-row>
-              <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+              <v-col v-for="i in recommended" :key="i" cols="12" lg="4" md="6">
                 <v-hover
                     v-slot:default="{ hover }"
                     close-delay="50"
@@ -68,19 +68,18 @@
 
                       <v-card-text>
                         <div class="text-h5 font-weight-bold primary--text">
-                          How to write an awesome blog post in 5 steps
+                        {{ i.dish_name }}
                         </div>
 
                         <div class="text-body-1 py-4">
-                          Ultrices sagittis orci a scelerisque. Massa placerat
-                          duis ultricies lacus sed turpis
+                          {{ i.ingredient }}
                         </div>
 
                         <div class="d-flex align-center">
                           <v-avatar color="secondary" size="36">
-                            <v-icon dark>mdi-feather</v-icon>
+                            <v-icon dark>mdi-food-fork-drink</v-icon>
                           </v-avatar>
-                          <div class="mr-auto pl-2">Yan Lee · 22 July 2019</div>
+                          <div class="mr-auto pl-2">{{ i.tool }}</div>
                           <div class="p2"><v-btn color="secondary" size="small"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
                       </v-card-text>
@@ -93,14 +92,35 @@
         </div>
       </v-col>
     </v-row>
+    <BotUI :messages="data" @msg-send="messageSendHandler"/>
   </div>
 </template>
 
 <script>
+import BotUI from '../components/BotUI.vue'
 export default {
   name: "Home",
-  // components: {
-  //   siderbar: () => import("@/components/details/sidebar"),
-  // },
+  components: {
+    BotUI,
+  },
+
+  data () {
+    return {
+      data: [
+        {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"},
+        {"dish_name": "鯖の塩焼き"}
+        ],
+      recommended: [
+        {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"},
+        {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"}
+      ]
+    }
+  },
+
+  methods: {
+    messageSendHandler(value) {
+      
+    }
+  },
 };
 </script>

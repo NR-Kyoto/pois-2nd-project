@@ -10,21 +10,34 @@
 .qkb-board-content(ref="boardContent")
   .qkb-board-content__bubbles(
     ref="boardBubbles"
-  )
-    message-bubble(
-      v-for="(item, index) in mainData",
-      :key="index",
-      :message="item",
-    )
+  ) <div>
+    <v-row>
+      <v-col v-for="item in mainData" :key="i" cols="12">
+        <v-card>
+          <v-img :aspect-ratio="16 / 9" src="https://i.epochtimes.com/assets/uploads/2022/06/id13756674-1101040220271528-600x400.jpg">
+        </v-img>
+        <v-card-text class="text-center">
+          <p><v-icon>mdi-chef-hat</v-icon>&nbsp;{{ item.dish_name }}</p>
+          <p><v-icon>mdi-food-apple</v-icon>&nbsp;{{ item.ingredient }}</p>
+          <p><v-icon>mdi-timer-alert-outline</v-icon>&nbsp;{{ item.time }}</p>
+          <p><v-icon>mdi-food-fork-drink</v-icon>&nbsp;{{ item.tool }}</p>
+        </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
+
+    //- message-bubble(
+    //-   v-for="(item, index) in mainData",
+    //-   :key="index",
+    //-   :message="item",
+    //- )
 </template>
 
 <script>
-import MessageBubble from '../MessageBubble/Main'
 
 export default {
   components: {
-    MessageBubble,
-    // MessageTyping
   },
 
   props: {

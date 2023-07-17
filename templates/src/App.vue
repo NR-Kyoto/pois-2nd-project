@@ -14,11 +14,6 @@
       <router-view></router-view>
     </v-container>
 
-    <BotUI
-      :messages="data"
-      @msg-send="messageSendHandler"
-    ></BotUI>
-
     <Footer></Footer>
   </v-app>
 </template>
@@ -30,17 +25,19 @@ export default {
   components: {
     AppBar: () => import("@/components/layout/appbar.vue"),
     Footer: () => import("@/components/layout/footer.vue"),
-    BotUI: () => import("@/components/BotUI.vue"),
   },
+
   data () {
     return {
-      data: null
+      
     }
-  },
+},
+
+
   methods: {
-    messageSendHandler(value) {
-      this.data = value;
-    }
-  }
+    // messageSendHandler(value) {
+    //   this.data = value;
+    // }
+  },
 };
 </script>

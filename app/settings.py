@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-6*+dmjg63yaj2q@syz6h9=3^-!@qq0vndk=p41q*$6@zktk=8-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '*']
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,14 +53,14 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
