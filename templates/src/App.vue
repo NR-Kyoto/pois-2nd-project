@@ -15,7 +15,8 @@
     </v-container>
 
     <BotUI
-    :messages= "data"
+      :messages="data"
+      @msg-send="messageSendHandler"
     ></BotUI>
 
     <Footer></Footer>
@@ -31,8 +32,15 @@ export default {
     Footer: () => import("@/components/layout/footer.vue"),
     BotUI: () => import("@/components/BotUI.vue"),
   },
-  data: () => ({
-    data:[{'type': 'text', 'text':'test long message test!'},{'type':'text', 'text': 'second test message.'}]
-  }),
+  data () {
+    return {
+      data: null
+    }
+  },
+  methods: {
+    messageSendHandler(value) {
+      this.data = value;
+    }
+  }
 };
 </script>

@@ -16,8 +16,8 @@ class MergeRecipes(APIView):
     def post(self, request, *args, **kwargs):
         
         # ユーザ認証
-        if not request.user.is_authenticated:
-            return Response(status=HTTP_401_UNAUTHORIZED)
+        # if not request.user.is_authenticated:
+        #     return Response(status=HTTP_401_UNAUTHORIZED)
 
         recipes = request.data['recipes'] # 献立のレシピ
 

@@ -27,7 +27,8 @@ INSTALLED_APPS = (
     'corsheaders',
     'app.login',
     'app.recipe',
-    'app.recommend'
+    'app.recommend',
+    'app'
 )
 
 # TEMPLATE_LOADERS = (
@@ -104,4 +105,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = "/login/"
+LOGIN_URL = "./app/login/"

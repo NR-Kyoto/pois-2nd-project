@@ -12,9 +12,10 @@
     slot(name="actions")
     button.qkb-action-item.qkb-action-item--send(@click="sendMessage")
       slot(name="sendButton")
-      <span>Confirm</span>
+      <v-icon>mdi-leaf</v-icon>
 </template>
 <script>
+import axios from "axios";
 
 export default {
   components: {
@@ -27,25 +28,31 @@ export default {
 
   data () {
     return {
-      messageText: null
+      messageJson: {
+        "recipes":"1"
+      }
     }
   },
 
   computed: {
 
     // TODO: sending
-
+    
   },
 
   mounted () {
-    this.$refs.qkbMessageInput.focus()
   },
 
   methods: {
     sendMessage () {
-      if (this.messageText) {
-        this.$emit('msg-send', { text: this.messageText })
-        this.messageText = null
+      if (this.messageJson) {
+        const token = localStorage.getItem("access");
+        axios.post("http://localhost:8000/merge/", this.messageJson)
+          .then(response => {
+            this.$router.go({path: this.$router.currentRoute.path, force: ture})
+          });
+        this.$emit('msg-send', { text: "Order has been sended!"});
+        this.messageJson = null
       }
     }
   }

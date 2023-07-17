@@ -20,15 +20,13 @@
     )
       slot(name="bubbleButton")
         transition(name="qkb-scaleUp")
-          <div v-if="!botActive">
-          <div class="qkb-bubble-btn-icon">Check</div>
+          <div v-if="!botActive" class="qkb-bubble-btn-icon">
+          <v-icon color="success" size="36">mdi-cart</v-icon>
           </div>
-          <div v-if="botActive">
-          <div class="qkb-bubble-btn-icon">Back</div>
+          <div v-if="botActive" class="qkb-bubble-btn-icon">
+          <v-icon color="success" size="36">mdi-cart-off</v-icon>
           </div>
   AppStyle(:options="optionsMain")
-  .qkb-preload-image
-    .qkb-msg-avatar__img(v-if="optionsMain.botAvatarImg")
 </template>
 <script>
 import EventBus from '../../helpers/event-bus'
@@ -75,7 +73,7 @@ export default {
         listTitle: 'Checklist',
         colorScheme: '#1b53d0',
         textColor: '#ffffff',
-        bubbleBtnSize: 100,
+        bubbleBtnSize: 80,
         animation: true,
         boardContentBg: '#fff',
         msgBubbleBgUser: '#4356e0',
@@ -154,10 +152,6 @@ export default {
     },
 
     sendMessage (value) {
-      this.$emit('msg-send', value)
-    },
-
-    selectOption (value) {
       this.$emit('msg-send', value)
     }
   }

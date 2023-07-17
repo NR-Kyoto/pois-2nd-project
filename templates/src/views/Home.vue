@@ -7,7 +7,7 @@
             dark
             gradient="to top, rgba(25,32,72,.7), rgba(25,32,72,.0)"
             height="500px"
-            src="https://images.pexels.com/photos/3244513/pexels-photo-3244513.jpeg"
+            src="https://www.ucsfhealth.org/-/media/project/ucsf/ucsf-health/education/hero/top-ten-foods-for-health-2x.jpg"
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
@@ -51,7 +51,7 @@
                         :elevation="hover ? 12 : 0"
                         flat
                         hover
-                        to="/detail"
+                        to=""
                     >
                       <v-img
                           :aspect-ratio="16 / 9"
@@ -80,7 +80,8 @@
                           <v-avatar color="secondary" size="36">
                             <v-icon dark>mdi-feather</v-icon>
                           </v-avatar>
-                          <div class="pl-2">Yan Lee · 22 July 2019</div>
+                          <div class="mr-auto pl-2">Yan Lee · 22 July 2019</div>
+                          <div class="p2"><v-btn color="secondary" size="small"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
                       </v-card-text>
                     </v-card>
