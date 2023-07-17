@@ -4,16 +4,31 @@
 )
   transition(name="qkb-fadeUp")
     .qkb-board(v-if="botActive")
-      BoardHeader(
-        :bot-title="optionsMain.botTitle",
-        @close-bot="botToggle"
-      )
-      BoardContent(
-        :main-data="messages"
-      )
-      BoardAction(
-        @msg-send="sendMessage"
-      )
+      .qkb-board-header
+        slot(name="header")
+          .qkb-board-header__title {{ listTitle }}
+      .qkb-board-content(ref="boardContent")
+        .qkb-board-content__bubbles(ref="boardBubbles") <div>
+          <v-row>
+            <v-col v-for="(item, index) in mainData" :key="index" cols="12">
+              <v-card>
+                <v-img :aspect-ratio="16 / 9" src="https://i.epochtimes.com/assets/uploads/2022/06/id13756674-1101040220271528-600x400.jpg">
+              </v-img>
+              <v-card-text class="text-center">
+                <p><v-icon>mdi-chef-hat</v-icon>&nbsp;{{ item.dish_name }}</p>
+                <p><v-icon>mdi-food-apple</v-icon>&nbsp;{{ item.ingredient }}</p>
+                <p><v-icon>mdi-timer-alert-outline</v-icon>&nbsp;{{ item.time }}</p>
+                <p><v-icon>mdi-food-fork-drink</v-icon>&nbsp;{{ item.tool }}</p>
+              </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
+      .qkb-board-action
+        .qkb-board-action__extra
+          button.qkb-action-item.qkb-action-item--send(@click="sendMessage")
+            slot(name="sendButton")
+            <v-icon>mdi-leaf</v-icon>
   .qkb-bot-bubble
     button.qkb-bubble-btn(
       @click="botToggle"
@@ -31,28 +46,19 @@
 <script>
 import EventBus from '../../helpers/event-bus'
 import Config from '../../config'
-import BoardHeader from './Board/Header'
-import BoardContent from './Board/Content'
-import BoardAction from './Board/Action'
 import AppStyle from './AppStyle'
+import axios from 'axios'
 
 export default {
-  name: 'VueCheckUI',
+  name: 'BotkUI',
 
   components: {
-    BoardHeader,
-    BoardContent,
-    BoardAction,
     AppStyle
   },
 
   props: {
-    options: {
-      type: Object,
-      default: () => { return {} }
-    },
 
-    messages: {
+    mainData: {
       type: Array
     },
 
@@ -63,6 +69,11 @@ export default {
 
     openDelay: {
       type: Number
+    },
+
+    listTitle: {
+      type: String,
+      default: 'Checklist'
     }
   },
 
@@ -110,6 +121,14 @@ export default {
     }
   },
 
+  watch: {
+    mainData: function (newVal) {
+      this.$nextTick(() => {
+        this.updateScroll()
+      })
+    }
+  },
+
   mounted () {
     document.addEventListener(Config.EVENT_OPEN, function () {
       this.botOpen()
@@ -152,8 +171,23 @@ export default {
     },
 
     sendMessage (value) {
-      this.$emit('msg-send', value)
-    }
+      if (this.mainData) {
+        const token = localStorage.getItem("access");
+        axios.post("http://localhost:8000/merge/", this.mainData, {headers: {'Content-Type': 'application/json;charset=utf-8','Authorization':token, "Access-Control-Allow-Origin": "*",'Access-Control-Allow-Headers': 'Content-Type, Authorization','Access-Control-Allow-Methods': '*',}})
+            .then(response => {
+            
+          });
+        this.$emit('msg-send', { text: "Order has been sended!"});
+        this.mainData = null
+      }
+    },
+
+    updateScroll () {
+      const contentElm = this.$refs.boardContent
+      const offsetHeight = this.$refs.boardBubbles.offsetHeight
+
+      contentElm.scrollTop = offsetHeight
+    },
   }
 }
 </script>

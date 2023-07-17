@@ -39,7 +39,7 @@
             <h2 class="text-h4 font-weight-bold pb-4">Recommended For You</h2>
 
             <v-row>
-              <v-col v-for="i in recommended" :key="i" cols="12" lg="4" md="6">
+              <v-col v-for="(item, index) in recommended" :key="index" cols="12" lg="4" md="6">
                 <v-hover
                     v-slot:default="{ hover }"
                     close-delay="50"
@@ -68,18 +68,18 @@
 
                       <v-card-text>
                         <div class="text-h5 font-weight-bold primary--text">
-                        {{ i.dish_name }}
+                        {{ item.dish_name }}
                         </div>
 
                         <div class="text-body-1 py-4">
-                          {{ i.ingredient }}
+                          {{ item.ingredient }}
                         </div>
 
                         <div class="d-flex align-center">
                           <v-avatar color="secondary" size="36">
                             <v-icon dark>mdi-food-fork-drink</v-icon>
                           </v-avatar>
-                          <div class="mr-auto pl-2">{{ i.tool }}</div>
+                          <div class="mr-auto pl-2">{{ item.tool }}</div>
                           <div class="p2"><v-btn color="secondary" size="small"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
                       </v-card-text>
@@ -92,16 +92,16 @@
         </div>
       </v-col>
     </v-row>
-    <BotUI :messages="data" @msg-send="messageSendHandler"/>
+    <CheckBoxUI :main-data="data" @msg-send="messageSendHandler"/>
   </div>
 </template>
 
 <script>
-import BotUI from '../components/BotUI.vue'
+import CheckBoxUI from '../components/CheckBoxUI.vue'
 export default {
   name: "Home",
   components: {
-    BotUI,
+    CheckBoxUI,
   },
 
   data () {
@@ -113,13 +113,14 @@ export default {
       recommended: [
         {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"},
         {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"}
-      ]
+      ],
+      Message: null
     }
   },
 
   methods: {
     messageSendHandler(value) {
-      
+      this.Message=value
     }
   },
 };
