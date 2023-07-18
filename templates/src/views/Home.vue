@@ -7,7 +7,7 @@
             dark
             gradient="to top, rgba(25,32,72,.7), rgba(25,32,72,.0)"
             height="500px"
-            src="https://images.pexels.com/photos/3244513/pexels-photo-3244513.jpeg"
+            src="https://www.ucsfhealth.org/-/media/project/ucsf/ucsf-health/education/hero/top-ten-foods-for-health-2x.jpg"
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
@@ -39,7 +39,7 @@
             <h2 class="text-h4 font-weight-bold pb-4">Recommended For You</h2>
 
             <v-row>
-              <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+              <v-col v-for="(item, index) in recommended" :key="index" cols="12" lg="4" md="6">
                 <v-hover
                     v-slot:default="{ hover }"
                     close-delay="50"
@@ -51,7 +51,7 @@
                         :elevation="hover ? 12 : 0"
                         flat
                         hover
-                        to="/detail"
+                        to=""
                     >
                       <v-img
                           :aspect-ratio="16 / 9"
@@ -71,18 +71,19 @@
 
                       <v-card-text>
                         <div class="text-h5 font-weight-bold primary--text">
-                          Recipe title must be here
+                        {{ item.dish_name }}
                         </div>
 
                         <div class="text-body-1 py-4">
-                          Main ingredients / Cooking time
+                          {{ item.ingredient }}
                         </div>
 
                         <div class="d-flex align-center">
-                          <!--v-avatar color="secondary" size="36">
-                            <v-icon dark>mdi-feather</v-icon>
-                          </v-avatar-->
-                          <div class="pl-2">Contributer name · Posted date</div>
+                          <v-avatar color="secondary" size="36">
+                            <v-icon dark>mdi-food-fork-drink</v-icon>
+                          </v-avatar>
+                          <div class="mr-auto pl-2">{{ item.tool }}</div>
+                          <div class="p2"><v-btn color="secondary" size="small"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
                       </v-card-text>
                     </v-card>
@@ -94,14 +95,36 @@
         </div>
       </v-col>
     </v-row>
+    <CheckBoxUI :main-data="data" @msg-send="messageSendHandler"/>
   </div>
 </template>
 
 <script>
+import CheckBoxUI from '../components/CheckBoxUI.vue'
 export default {
   name: "Home",
-  // components: {
-  //   siderbar: () => import("@/components/details/sidebar"),
-  // },
+  components: {
+    CheckBoxUI,
+  },
+
+  data () {
+    return {
+      data: [
+        {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"},
+        {"dish_name": "鯖の塩焼き"}
+        ],
+      recommended: [
+        {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"},
+        {"dish_name": "鯖の塩焼き","ingredient": ["鯖","塩","大根"], "time": 2, "tool": "fork"}
+      ],
+      Message: null
+    }
+  },
+
+  methods: {
+    messageSendHandler(value) {
+      this.Message=value
+    }
+  },
 };
 </script>

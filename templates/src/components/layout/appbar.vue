@@ -131,9 +131,9 @@ export default {
         title: "Home",
         to: "/",
       },
-     {
-        title: "Results",
-        to: "/category",
+      {
+        title: "Single",
+        to: "/single",
       },
       {
         title: "Detail",

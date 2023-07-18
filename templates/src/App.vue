@@ -14,10 +14,6 @@
       <router-view></router-view>
     </v-container>
 
-    <BotUI
-    :messages= "data"
-    ></BotUI>
-
     <Footer></Footer>
   </v-app>
 </template>
@@ -29,10 +25,19 @@ export default {
   components: {
     AppBar: () => import("@/components/layout/appbar.vue"),
     Footer: () => import("@/components/layout/footer.vue"),
-    BotUI: () => import("@/components/BotUI.vue"),
   },
-  data: () => ({
-    data:[{'type': 'text', 'text':'test long message test!'},{'type':'text', 'text': 'second test message.'}]
-  }),
+
+  data () {
+    return {
+      
+    }
+},
+
+
+  methods: {
+    // messageSendHandler(value) {
+    //   this.data = value;
+    // }
+  },
 };
 </script>

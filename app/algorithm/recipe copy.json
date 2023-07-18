@@ -1,0 +1,60 @@
+{
+    "Hamburger": [
+        {
+            "id": "hamburger1",
+            "ingredient": "vegetable",
+            "method": "cut",
+            "time": 60,
+            "condition": null,
+            "previous": null,
+            "text": "玉ねぎをみじん切りにします。"
+        },
+        {
+            "id": "hamburger2",
+            "ingredient": "vegetable",
+            "method": "stir",
+            "time": 540,
+            "condition": ["hamburger1"],
+            "previous": null,
+            "text": "フライパンにサラダ油大さじ1を入れて強めの中火で熱し、玉ねぎを加えます。軽く色づいてきたら、弱めの中火に火加減を落とし、合計8〜9分ほどじっくり炒めて甘みを引き出しましょう。"
+        },
+        {
+            "id": "hamburger3",
+            "ingredient": "vegetable",
+            "method": "other",
+            "time": 300,
+            "condition": ["hamburger2"],
+            "previous": "hamburger2",
+            "text": "玉ねぎの粗熱をとります。"
+        }
+    ],
+    "ConsommeSoup": [
+        {
+            "id": "soup1",
+            "ingredient": "vegetable",
+            "method": "cut",
+            "time": 180,
+            "condition": null,
+            "previous": null,
+            "text": "キャベツは葉をひと口大にちぎり、芯は薄切りにします。"
+        },
+        {
+            "id": "soup2",
+            "ingredient": "vegetable",
+            "method": "cut",
+            "time": 180,
+            "condition": null,
+            "previous": null,
+            "text": "じゃがいもはひと口大に切ります。"
+        },
+        {
+            "id": "soup3",
+            "ingredient": "vegetable",
+            "method": "cut",
+            "time": 180,
+            "condition": null,
+            "previous": null,
+            "text": "にんじんは乱切りにします。"
+        }
+    ]
+}

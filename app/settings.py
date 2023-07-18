@@ -15,6 +15,7 @@ SECRET_KEY = 'django-insecure-6*+dmjg63yaj2q@syz6h9=3^-!@qq0vndk=p41q*$6@zktk=8-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 
+ALLOWED_HOSTS = ['localhost', '*']
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,7 +27,8 @@ INSTALLED_APPS = (
     'corsheaders',
     'app.login',
     'app.recipe',
-    'app.recommend'
+    'app.recommend',
+    'app'
 )
 
 # TEMPLATE_LOADERS = (
@@ -37,6 +39,8 @@ INSTALLED_APPS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
@@ -49,14 +53,14 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -85,6 +89,10 @@ TEMPLATES = [
     },
 ]
 
+
+# CustomUser
+AUTH_USER_MODEL = 'login.CustomUser'
+
 LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'Asia/Tokyo'
@@ -96,3 +104,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = "./app/login/"

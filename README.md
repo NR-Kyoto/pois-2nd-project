@@ -90,6 +90,17 @@ urlpatterns = [
     path('', views.ビューの関数, name='URLパスの名前'),
 ]
 ```
+
+## DBの更新 / 初期化
+料理名と料理手順を格納するDBモデル Dish に初期データを格納するためには、以下のコマンドを実行する
+```
+python app/manage.py loaddata db_dish.json
+```
+
+DjangoのTestCaseクラスを用いたテストを行う場合は、以下をテストクラス内に記述する(appアプリの内部での動作のみ確認済み。他のアプリで動かす場合はできるかわかんない...)。
+```python
+fixtures = ["db_dish.json"]
+```
 ## How to use Yarn
 
 Step 1 -> Enter Docker container: 
@@ -110,3 +121,14 @@ yarn run dev
 access localhost:3000
 
 then you can enter the homepages
+
+## DBの更新 / 初期化
+料理名と料理手順を格納するDBモデル Dish に初期データを格納するためには、以下のコマンドを実行する
+```
+python app/manage.py loaddata db_dish.json
+```
+
+DjangoのTestCaseクラスを用いたテストを行う場合は、以下をテストクラス内に記述する(appアプリの内部での動作のみ確認済み。他のアプリで動かす場合はできるかわかんない...)。
+```python
+fixtures = ["db_dish.json"]
+```

@@ -2,7 +2,7 @@
  * @Author: dnimo kuochingcha@gmail.com
  * @Date: 2022-02-11 19:34:46
  * @LastEditors: dnimo kuochingcha@gmail.com
- * @LastEditTime: 2023-07-11 16:23:03
+ * @LastEditTime: 2023-07-11 17:45:47
  * @FilePath: /pois-2nd-project/giraffe/src/views/Authors.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -41,7 +41,7 @@
               <v-col>
                   <div>
                       <v-img
-                        src="https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg"
+                        src="https://www.knt.co.jp/travelguide/kokunai/image/travelguide_043_mv.jpg"
                         :aspect-ratio="16 / 9"
                         gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                         height="300px"
@@ -86,9 +86,25 @@
                           </v-btn>
                         </div>
                       </v-card-text>
+
+                      <div class="d-flex algin-center">
+                        <div><h2 class="text-h4 font-weight-bold">Tools</h2></div>
+                        <div class="pl-2"><v-btn color="primary">Edit</v-btn></div>
+                      </div>
                       
-                      <h2 class="text-h4 font-weight-bold pb-4">Order Record</h2>
                       <v-divider class="my-4"></v-divider>
+                      <v-row cols="6" lg="6" xl="4">
+                        <v-col v-for="i in 6" :key="i" cols="6" lg="4" md="6">
+                          <v-card>
+                            <v-card-text class="text-center">fork</v-card-text>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                      <v-divider class="my-4"></v-divider>
+
+                      <h2 class="text-h4 font-weight-bold">Order Record</h2>
+                      <v-divider class="my-4"></v-divider>
+                      
                       <v-row cols="12" lg="12" xl="8">
                         <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
                           <v-hover
@@ -108,7 +124,7 @@
                                 class="elevation-2"
                                 gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                                 height="200px"
-                                src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                                src="https://i.epochtimes.com/assets/uploads/2022/06/id13756674-1101040220271528-600x400.jpg"
                                 style="border-radius: 16px"
                               >
                               <v-card-text>
