@@ -95,13 +95,13 @@ urlpatterns = [
 Step 1 -> Enter Docker container: 
 
 ```shell
-docker-compose exec django bash
+docker-compose exec vue bash
 ```
 
 Step 2 -> build dev:
 
 ```shell
-cd UI project path -> giraffe
+cd path -> pois-2nd-project
 yarn install
 
 yarn run dev

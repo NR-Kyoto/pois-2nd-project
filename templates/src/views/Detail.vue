@@ -13,6 +13,7 @@
               ></v-img-->
 
               <v-card-text>
+<<<<<<< HEAD
                 <div class="py-4">
                   <v-alert
                     class="text-h6 text-center"
@@ -22,6 +23,10 @@
                   >
                     Recipe image must be put in this area.
                   </v-alert>
+=======
+                <div>
+                  <v-btn color="secondary">ANIMAL</v-btn>
+>>>>>>> b984eab12b950fddc65e1f228c2856401f3a57a0
                 </div>
 
                 <!--div>
