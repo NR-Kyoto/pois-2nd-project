@@ -259,18 +259,6 @@ class Schedule:
         tmp = [(st, end) for st, end in ft if st < end]
         return tmp
 
-    
-    def setScheduleScore(self, last_nodes):
-
-        score = 0
-        # 洗い物のまとまり具合
-
-        # 最終工程が最後の方にあるのか？
-        leave_time = [self.finish_time - time for time, task, status in self.task_timing if (task.task_id in last_nodes) and (status == "end") and (task.method in ["stir", "stew"])]
-        score += 1 / (1 + sum(leave_time))
-
-        self.score = score
-
     # スケジュールをJSONに変換
     def getJson(self):
 
@@ -407,6 +395,7 @@ class RecipeScheduler:
     # self.optimal_schedule : 最適なスケジュール．Schedule
     # self.wash_tasks       : 洗い物タスクのインスタンス．リソースをキー，インスタンスを値とする辞書
     # self.recipe_graph     : レシピを表す有向グラフ．
+    # self.best_finish_time : 最速の終了時間
 
     # self.start_time       : 計算の開始時間（強制終了用）
     # self.limit_time       : 計算の最大時間
@@ -462,6 +451,9 @@ class RecipeScheduler:
         if not self.recipe_graph:
             print('Recipe is invalid')
             raise ValueError("cannot make graph")
+
+        # 探索済みの中で最速の終了時間
+        self.best_finish_time = sys.maxsize
 
         # 計算時間の制限
         self.start_time = 0
@@ -580,7 +572,7 @@ class RecipeScheduler:
     def recursive(self, E, F, P, unassigned_tasks):
 
         # 計算時間を制限
-        if time.time() - self.start_time > 60:
+        if time.time() - self.start_time > self.limit_time:
             return
 
         # 枝刈りをすべきか
@@ -617,18 +609,22 @@ class RecipeScheduler:
             self.addCleanUpTask(P) # 最後の洗い物を行う
 
             # より優れたスケジュールなら入れ替え
-            if P.finish_time < self.optimal_schedule.finish_time + 60:
+            if P.finish_time < self.best_finish_time + 180:
                 
                 # スコア算出
-                P.setScheduleScore(list(self.recipe_graph.predecessors(1)))
+                self.setScheduleScore(P)
 
                 if P.score > self.optimal_schedule.score:
+                # if P.finish_time < self.optimal_schedule.finish_time:
                 
                     global counter
                     counter += 1
                     print("counter : %d (%d sec)" % (counter, P.finish_time))
                     self.optimal_schedule = copy.deepcopy(P)
                     self.optimal_schedule.plotSchedule()
+
+            if self.best_finish_time > P.finish_time:
+                self.best_finish_time = P.finish_time
 
     # 枝刈りをするかどうか
     def isBounded(self, P, S):
@@ -650,6 +646,30 @@ class RecipeScheduler:
             return True
 
         return False
+    
+    def setScheduleScore(self, schedule):
+
+        # 洗い物のまとまり具合
+        wash_task = [(time, task, status) for time, task, status in schedule.task_timing if ('wash' in task.task_id)]
+        wash_task_num = len(wash_task) / 2
+
+        count = 0
+        for x, y in zip(wash_task, wash_task[1:]):
+            if x[2] == 'end' and y[2] == 'start':
+                if x[0] == y[0]:
+                    count += 1
+
+        wash_score = count / wash_task_num
+
+        # 最終工程が最後の方にあるのか？
+        last_nodes = list(self.recipe_graph.predecessors(1))
+        leave_time = [schedule.finish_time - time for time, task, status in schedule.task_timing if (task.task_id in last_nodes) and (status == "end") and (task.method in ["stir", "stew"])]
+        time_score = 1 / (1 + sum(leave_time))
+
+        score = (wash_score + time_score * 300) / 301
+        # score = (wash_score + time_score * 500) / 501
+
+        schedule.score = score
 
     # 作業の並列化と制約チェック
     def recstruct(self, P, task):
