@@ -249,11 +249,79 @@ def get_dish_image_url_response(request: HttpRequest) -> HttpResponse:
     '''
     入力データ e.x.{"id" : 2} を受け取り、料理の写真のURLを返す
     '''
-    body = json.loads(request.body)
-    try:
-        dish = Dish.objects.get(dish_id=body["id"])
-        url = get_dish_image_url(dish, get_host_url(request))
-        return HttpResponse({'url':url})
-    except Exception as e:
-        print(e)
-        return HttpResponse({'error':'cannot get dish_image url'})
+    if request.method == "POST":
+        body = json.loads(request.body)
+        try:
+            dish = Dish.objects.get(dish_id=body["id"])
+            url = get_dish_image_url(dish, get_host_url(request))
+            return HttpResponse({'url':url})
+        except Exception as e:
+            print(e)
+            return HttpResponse({'error':'cannot get dish_image url'})
+    return HttpResponse('POST ONLY')
+
+class RegistMenu(APIView):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            body = json.loads(request.body)
+            dish_obj_list = [Dish.objects.get(dish_id=id) for id in body]
+            register_menu(request, dish_obj_list)
+            return Response(json.dumps({"result": "Success"}, ensure_ascii=False))
+        except Exception as e:
+            print(e)
+            return Response(json.dumps({"result": "Failed"}, ensure_ascii=False))
+
+class SearchDish(APIView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            body = json.loads(request.body)
+            hosturl = get_host_url(request)
+            dishes = Dish.objects.filter(name__contains=body["search_str"]).values_list("dish_name")
+            out = [get_dish_info(dish, hosturl) for dish in dishes]
+            out = json.dumps(out, ensure_ascii=False)
+            return Response(out)
+        except Exception as e:
+            print(e)
+            return Response({'error':'cannot get dishes'})
+
+class ShowDishInfo(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        body = json.loads(request.body)
+        d = get_dish_detail_info(body["id"], get_host_url(request))
+        return Response(json.dumps(d, ensure_ascii=False))
+    
+class ShowCookingToolInfo(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        tool_info = get_cookingtool_info(request.user)
+        return Response(json.dumps(tool_info, ensure_ascii=False))
+
+class RegistCookingToolInfo(APIView):
+
+    def post(self, request, *args, **kwargs):
+        body = json.loads(request.body)
+        make_or_update_cookingtool_info(request, body)
+        return Response(json.dumps({"result": "Success"}, ensure_ascii=False))
+
+class ShowMenuHistory(APIView):
+
+    def get(self, request, *args, **kwargs):
+        l = get_menu_history(request)
+        return Response(json.dumps(l, ensure_ascii=False))
+
+class GetDishImageURL(APIView):
+
+    def get(self, request, *args, **kwargs):
+        body = json.loads(request.body)
+        try:
+            dish = Dish.objects.get(dish_id=body["id"])
+            url = get_dish_image_url(dish, get_host_url(request))
+            return Response({'url':url})
+        except Exception as e:
+            print(e)
+            return Response({'error':'cannot get dish_image url'})

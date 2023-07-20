@@ -1,14 +1,13 @@
 from django.urls import path
-from .views import regist_menu, search_dish, show_dish_info, regist_cookingtool_info, show_menu_history, get_dish_image_url_response, show_cookingtool_info
-from .views import MergeRecipes
+from .views import MergeRecipes, RegistMenu, SearchDish, ShowDishInfo, ShowCookingToolInfo, RegistCookingToolInfo, ShowMenuHistory, GetDishImageURL
 
 urlpatterns = [
-    path('regist_menu/', regist_menu, name='regist_menu'),
-    path('search_dish/', search_dish, name='search_dish'),
-    path('show_dish_info/', show_dish_info, name='show_dish_info'),
-    path('show_cookingtool_info', show_cookingtool_info, name='show_cookingtool_info'),
-    path('regist_cookingtool_info/', regist_cookingtool_info, name='regist_cookingtool_info'),
-    path('show_menu_history/', show_menu_history, name='show_menu_history'),
-    path('get_image_url/', get_dish_image_url_response, name='get_dish_image_url'),
+    path('regist_menu/', RegistMenu.as_view(), name='regist_menu'),
+    path('search_dish/', SearchDish, name='search_dish'),
+    path('show_dish_info/', ShowDishInfo.as_view(), name='show_dish_info'),
+    path('show_cookingtool_info', ShowCookingToolInfo.as_view(), name='show_cookingtool_info'),
+    path('regist_cookingtool_info/', RegistCookingToolInfo.as_view(), name='regist_cookingtool_info'),
+    path('show_menu_history/', ShowMenuHistory.as_view(), name='show_menu_history'),
+    path('get_image_url/', GetDishImageURL.as_view(), name='get_dish_image_url'),
     path('merge/', MergeRecipes.as_view(), name='merge'),
 ]
