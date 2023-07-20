@@ -99,7 +99,7 @@
                         "ingredient": "vegetable",
                         "method": "cut",
                         "time": "240",
-                        "condition": null,
+                        "condition": ["vermicellisalad1"],
                         "previous": null,
                         "text": "きゅうり、ハム、薄焼き卵を千切りにする。お好みに合わせて春雨も食べやすい長さに切る。"
                     },

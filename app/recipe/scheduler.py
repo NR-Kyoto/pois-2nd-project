@@ -38,6 +38,7 @@ class Schedule:
     # self.resources_status : 各リソースの最後の状態．リソースをキー，状態を値とした辞書
     # self.finish_time      : スケジュールの終了時間
     # self.task_timing      : 各タスクの開始時間・終了時間．（時間，タスク，'start' | 'end'）のリスト
+    # self.score            : スケジュールのスコア
 
     def __init__(self, user):
         
@@ -76,6 +77,9 @@ class Schedule:
         
         # 各作業の開始と修了
         self.task_timing = []
+
+        # スケジュールの優劣を決めるスコア
+        self.score = -1.0
 
     # タスクを追加する
     def addTask(self, add_task, use_resources):
@@ -161,12 +165,17 @@ class Schedule:
             
             # 直前調理とリソースがかぶっている場合は流用
             if task.previous and (resource in task.previous.resources):
-                assigned += [x for x in self.resources 
-                    if (resource in x) and 
-                    (self.schedule.get(x)) and 
-                    (self.schedule.get(x)[-1][1].task_id == task.previous.task_id)
-                ]
-                continue
+                
+                candidate = [x for x in self.resources if resource in x]
+
+                tmp = None
+                for x in candidate:
+                    if len(self.schedule.get(x)) > 0 and self.schedule.get(x)[-1][1].task_id == task.previous.task_id:
+                        tmp = x
+
+                if tmp:
+                    assigned.append(tmp)
+                    continue
             
             # ユーザが所持しているリソースのうちタスクで使用するリソース
             tmp = [x for x in self.resources if resource in x]
@@ -194,10 +203,9 @@ class Schedule:
 
                 # 優先順位２：洗い物不要
                 checklist = [Schedule.checkNecessityWash(x, task.status) for x in status]
-                if True in checklist:
-                    assigned.append(tmp[checklist.index(True)])
+                if False in checklist:
+                    assigned.append(tmp[checklist.index(False)])
                     continue
-             
 
                 # 優先順位３：洗い物必要
                 # 使い終わるのが早い順に割り当てる
@@ -248,25 +256,72 @@ class Schedule:
         ft.append((start, sys.maxsize))
 
         # 間が0秒でないものを返す
-        tmp = [(st, end) for st, end in ft if st != end]
+        tmp = [(st, end) for st, end in ft if st < end]
         return tmp
+
+    # task_timingをいい感じに並べ替える
+    def sortTask(self):
+
+        # 同じ時間のタスクでグルーピング
+        grouped = {}
+        t = -1
+        for time, task, status in self.task_timing:
+            if t != time:
+                t = time
+                grouped[t] = []
+
+            grouped[t].append((time, task, status))
+
+        self.task_timing.clear()
+
+        # 並び替え
+        for l in grouped.values():
+            tmp = []
+            count = -1
+            
+            for time, task, status in l:
+
+                # 作業終了が最初
+                if status == 'end':
+                    tmp.insert(0, (time, task, status))
+                    count += 1
+
+                # 人手が必要ないタスク
+                elif 'user' not in task.resources:
+                    tmp.insert(count, (time, task, status))
+
+                else:
+                    tmp.append((time, task, status))
+
+            self.task_timing += tmp
 
     # スケジュールをJSONに変換
     def getJson(self):
 
             result = []
+            t = -1
 
             for time, task, status in self.task_timing:
 
                 if status == 'end':
                     continue
 
-                result.append({
-                    "dish_index": task.dish_id,
-                    "context": task.context,
-                    "tools": task.resources,
-                    "time": task.time
-                })
+                if t == time:
+                    result.append({
+                        "dish_index": task.dish_id,
+                        "context": "その間に，" + task.context,
+                        "tools": task.resources,
+                        "time": task.time
+                    })
+                    
+                else:
+                    t = time
+                    result.append({
+                        "dish_index": task.dish_id,
+                        "context": task.context,
+                        "tools": task.resources,
+                        "time": task.time
+                    })
 
             return result
 
@@ -339,6 +394,14 @@ class Task:
         'mix' : ['user', 'bowl'],
     })
 
+    source_jp = dict({
+        'pan': 'フライパン',
+        'pot': '鍋',
+        'knife': '包丁',
+        'board': 'まな板',
+        'bowl': 'ボール',
+    })
+
     def __init__(self, data=None, dish_index=0, table=None):
 
         self.dish_id = dish_index
@@ -351,7 +414,7 @@ class Task:
             self.resources = ['user', data.get('resources')]
             self.condition = None
             self.previous = None
-            self.context = data.get('resources') + "を洗う"
+            self.context = "使った" + Task.source_jp.get(re.findall('[a-z]+', data.get('resources'))[0]) + "を洗う"
 
         else:
             self.task_id = data.get('id')
@@ -363,8 +426,12 @@ class Task:
 
             elif self.method == 'leave':
                 self.resources = self.previous.resources.copy()
+
                 if 'user' in self.resources:
                     self.resources.remove('user')
+
+                if 'knife' in self.resources:
+                    self.resources.remove('knife')
 
             else:
                 self.resources = Task.method_to_resource.get(self.method).copy()
@@ -383,6 +450,7 @@ class RecipeScheduler:
     # self.optimal_schedule : 最適なスケジュール．Schedule
     # self.wash_tasks       : 洗い物タスクのインスタンス．リソースをキー，インスタンスを値とする辞書
     # self.recipe_graph     : レシピを表す有向グラフ．
+    # self.best_finish_time : 最速の終了時間
 
     # self.start_time       : 計算の開始時間（強制終了用）
     # self.limit_time       : 計算の最大時間
@@ -438,6 +506,9 @@ class RecipeScheduler:
         if not self.recipe_graph:
             print('Recipe is invalid')
             raise ValueError("cannot make graph")
+
+        # 探索済みの中で最速の終了時間
+        self.best_finish_time = sys.maxsize
 
         # 計算時間の制限
         self.start_time = 0
@@ -528,6 +599,9 @@ class RecipeScheduler:
 
         print(time_end - self.start_time)
 
+        # いい感じに並べ替え
+        self.optimal_schedule.sortTask()
+
         self.result_json["time"] = self.optimal_schedule.finish_time
         self.result_json["procedure"] = self.optimal_schedule.getJson()
 
@@ -556,7 +630,7 @@ class RecipeScheduler:
     def recursive(self, E, F, P, unassigned_tasks):
 
         # 計算時間を制限
-        if time.time() - self.start_time > 60:
+        if time.time() - self.start_time > self.limit_time:
             return
 
         # 枝刈りをすべきか
@@ -589,22 +663,26 @@ class RecipeScheduler:
                     return
 
         else:
+
             self.addCleanUpTask(P) # 最後の洗い物を行う
 
-            # global counter
-            # counter += 1
-            # mem = psutil.virtual_memory() 
-
-            # print("counter : %d (%f) %dsec" % (counter, mem.used, P.finish_time))
-
             # より優れたスケジュールなら入れ替え
-            if P.finish_time < self.optimal_schedule.finish_time: 
+            if P.finish_time < self.best_finish_time + 180:
                 
-                global counter
-                counter += 1
-                print("counter : %d (%d sec)" % (counter, P.finish_time))
-                self.optimal_schedule = copy.deepcopy(P)
-                self.optimal_schedule.plotSchedule()
+                # スコア算出
+                self.setScheduleScore(P)
+
+                if P.score > self.optimal_schedule.score:
+                # if P.finish_time < self.optimal_schedule.finish_time:
+                
+                    global counter
+                    counter += 1
+                    print("counter : %d (%d sec)" % (counter, P.finish_time))
+                    self.optimal_schedule = copy.deepcopy(P)
+                    self.optimal_schedule.plotSchedule()
+
+            if self.best_finish_time > P.finish_time:
+                self.best_finish_time = P.finish_time
 
     # 枝刈りをするかどうか
     def isBounded(self, P, S):
@@ -626,6 +704,30 @@ class RecipeScheduler:
             return True
 
         return False
+    
+    def setScheduleScore(self, schedule):
+
+        # 洗い物のまとまり具合
+        wash_task = [(time, task, status) for time, task, status in schedule.task_timing if ('wash' in task.task_id)]
+        wash_task_num = len(wash_task) / 2
+
+        count = 0
+        for x, y in zip(wash_task, wash_task[1:]):
+            if x[2] == 'end' and y[2] == 'start':
+                if x[0] == y[0]:
+                    count += 1
+
+        wash_score = count / wash_task_num
+
+        # 最終工程が最後の方にあるのか？
+        last_nodes = list(self.recipe_graph.predecessors(1))
+        leave_time = [schedule.finish_time - time for time, task, status in schedule.task_timing if (task.task_id in last_nodes) and (status == "end") and (task.method in ["stir", "stew"])]
+        time_score = 1 / (1 + sum(leave_time))
+
+        score = (wash_score + time_score * 300) / 301
+        # score = (wash_score + time_score * 500) / 501
+
+        schedule.score = score
 
     # 作業の並列化と制約チェック
     def recstruct(self, P, task):
@@ -673,17 +775,21 @@ class RecipeScheduler:
         valid_time = []
         span = []
         for st, end in user_ft:
-            if st > final_time and end - st > wt:
-                valid_time.append((st, end))
-                span.append(end - st)
+            if st > final_time:
+                if end - st > wt:
+                    valid_time.append((st, end))
+                    span.append(end - st)
 
-            elif end > final_time and end - final_time > wt:
-                valid_time.append((final_time, end))
-                span.append(end - final_time)
+            elif end > final_time:
+                if end - final_time > wt:
+                    valid_time.append((final_time, end))
+                    span.append(end - final_time)
 
         # 利用可能な空き時間のうち最も短いところで洗う
         best_index = span.index(min(span))
         schedule.insertWash(valid_time[best_index][0], self.wash_tasks.get(resource))
+
+
 
 # if __name__ == "__main__":
     
