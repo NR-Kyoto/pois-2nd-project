@@ -1,11 +1,3 @@
-<!--
- * @Author: dnimo kuochingcha@gmail.com
- * @Date: 2022-02-11 19:34:46
- * @LastEditors: dnimo kuochingcha@gmail.com
- * @LastEditTime: 2023-07-11 17:45:47
- * @FilePath: /pois-2nd-project/giraffe/src/views/Authors.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 <template>
   <div>
     <v-row>
@@ -150,13 +142,15 @@
           </div>
         </div>
       </v-col>
-
-      <v-col>
-        <div>
-          <siderbar />
-        </div>
-      </v-col>
     </v-row>
+    <v-btn
+        class="flex-grow-1"
+        height="48"
+        variant="tonal"
+        @click="logout"
+      >
+        logout
+      </v-btn>
   </div>
 </template>
 
@@ -164,8 +158,27 @@
 export default {
   name: "Category",
   data: () => ({
-    username: localStorage.username
-  })
+    username: localStorage.username,
+
+  }),
+  async created () {
+    try {
+      const token = localStorage.getItem("access");
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        };
+      const response = await axios.get("http://localhost:8000/recipe/getRecipe/get_menu_history", config)
+      console.log(response)
+    }catch (error) {
+      console.log(error)
+    }
+  },
+  methods: {
+    logout () {
+      localStorage.clear();
+      this.$router.push('/')
+    }
+  }
 };
 </script>
 

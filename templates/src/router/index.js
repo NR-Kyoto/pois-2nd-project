@@ -11,9 +11,9 @@ const routes = [
         component: Home
     },
     {
-        path: '/single',
-        name: 'Single',
-        component: () => import("@/views/Single.vue"),
+        path: '/search',
+        name: 'Search',
+        component: () => import("@/views/Search.vue"),
     },
     {
         path: '/detail',

@@ -16,7 +16,7 @@ from app.recipe.views import get_dish_info
 
 #     return d_list
 
-class RecommendRecipeView(generics.GenericAPIView):
+# class RecommendRecipeView(generics.GenericAPIView):
     
-    def get(self, request):
-        body = json.loads()
+#     def get(self, request):
+#         body = json.loads()

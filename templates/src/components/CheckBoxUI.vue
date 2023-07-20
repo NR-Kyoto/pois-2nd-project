@@ -15,10 +15,10 @@
                 <v-img :aspect-ratio="16 / 9" src="https://i.epochtimes.com/assets/uploads/2022/06/id13756674-1101040220271528-600x400.jpg">
               </v-img>
               <v-card-text class="text-center">
-                <p><v-icon>mdi-chef-hat</v-icon>&nbsp;{{ item.dish_name }}</p>
-                <p><v-icon>mdi-food-apple</v-icon>&nbsp;{{ item.ingredient }}</p>
-                <p><v-icon>mdi-timer-alert-outline</v-icon>&nbsp;{{ item.time }}</p>
-                <p><v-icon>mdi-food-fork-drink</v-icon>&nbsp;{{ item.tool }}</p>
+                <p><v-icon>mdi-chef-hat</v-icon>&nbsp;{{ item }}</p>
+                //- <p><v-icon>mdi-food-apple</v-icon>&nbsp;{{ item.ingredient }}</p>
+                //- <p><v-icon>mdi-timer-alert-outline</v-icon>&nbsp;{{ item.time }}</p>
+                //- <p><v-icon>mdi-food-fork-drink</v-icon>&nbsp;{{ item.tool }}</p>
               </v-card-text>
               </v-card>
             </v-col>
@@ -62,6 +62,10 @@ export default {
       type: Array
     },
 
+    recipes: {
+      type: Object
+    },
+
     isOpen: {
       type: Boolean,
       default: false
@@ -90,7 +94,8 @@ export default {
         msgBubbleBgUser: '#4356e0',
         msgBubbleColorUser: '#fff',
         inputDisablePlaceholder: null
-      }
+      },
+      message: {}
     }
   },
 
@@ -170,23 +175,26 @@ export default {
       }
     },
 
-    sendMessage (value) {
+    async sendMessage () {
+
       if (this.mainData) {
-        const token = localStorage.getItem("access");
-        axios.post("http://localhost:8000/merge/", this.mainData, {headers: {'Content-Type': 'application/json;charset=utf-8','Authorization':token, "Access-Control-Allow-Origin": "*",'Access-Control-Allow-Headers': 'Content-Type, Authorization','Access-Control-Allow-Methods': '*',}})
-            .then(response => {
-            
-          });
-        this.$emit('msg-send', { text: "Order has been sended!"});
-        this.mainData = null
+        const token = sessionStorage.getItem("access");
+        const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        };
+        const response = await axios.post("http://localhost:8000/recipe/mergeRecipe", this.recipes, config)
+        this.$emit('msg-send', response);
+        this.recipes = null;
+        this.mainData = null;
+        this.botActive = false;
       }
     },
 
     updateScroll () {
       const contentElm = this.$refs.boardContent
-      const offsetHeight = this.$refs.boardBubbles.offsetHeight
+      // const offsetHeight = this.$refs.boardBubbles.offsetHeight
 
-      contentElm.scrollTop = offsetHeight
+      // contentElm.scrollTop = offsetHeight
     },
   }
 }

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import regist_menu, search_dish, show_dish_info, regist_cookingtool_info, show_menu_history
-from .views import MergeRecipes
+from .views import MergeRecipes, getRecipe
 
 urlpatterns = [
     path('regist_menu/', regist_menu, name='regist_menu'),
@@ -8,5 +8,6 @@ urlpatterns = [
     path('show_dish_info/', show_dish_info, name='show_dish_info'),
     path('regist_cookingtool_info/', regist_cookingtool_info, name='regist_cookingtool_info'),
     path('show_menu_history/', show_menu_history, name='show_menu_history'),
-    path('', MergeRecipes.as_view(), name='merge'),
+    path('mergeRecipe', MergeRecipes.as_view(), name='MergeRecipe'),
+    path('getRecipe/', getRecipe.as_view(), name='get Recipe')
 ]
