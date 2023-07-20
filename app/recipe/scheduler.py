@@ -259,22 +259,69 @@ class Schedule:
         tmp = [(st, end) for st, end in ft if st < end]
         return tmp
 
+    # task_timingをいい感じに並べ替える
+    def sortTask(self):
+
+        # 同じ時間のタスクでグルーピング
+        grouped = {}
+        t = -1
+        for time, task, status in self.task_timing:
+            if t != time:
+                t = time
+                grouped[t] = []
+
+            grouped[t].append((time, task, status))
+
+        self.task_timing.clear()
+
+        # 並び替え
+        for l in grouped.values():
+            tmp = []
+            count = -1
+            
+            for time, task, status in l:
+
+                # 作業終了が最初
+                if status == 'end':
+                    tmp.insert(0, (time, task, status))
+                    count += 1
+
+                # 人手が必要ないタスク
+                elif 'user' not in task.resources:
+                    tmp.insert(count, (time, task, status))
+
+                else:
+                    tmp.append((time, task, status))
+
+            self.task_timing += tmp
+
     # スケジュールをJSONに変換
     def getJson(self):
 
             result = []
+            t = -1
 
             for time, task, status in self.task_timing:
 
                 if status == 'end':
                     continue
 
-                result.append({
-                    "dish_index": task.dish_id,
-                    "context": task.context,
-                    "tools": task.resources,
-                    "time": task.time
-                })
+                if t == time:
+                    result.append({
+                        "dish_index": task.dish_id,
+                        "context": "その間に，" + task.context,
+                        "tools": task.resources,
+                        "time": task.time
+                    })
+                    
+                else:
+                    t = time
+                    result.append({
+                        "dish_index": task.dish_id,
+                        "context": task.context,
+                        "tools": task.resources,
+                        "time": task.time
+                    })
 
             return result
 
@@ -347,6 +394,14 @@ class Task:
         'mix' : ['user', 'bowl'],
     })
 
+    source_jp = dict({
+        'pan': 'フライパン',
+        'pot': '鍋',
+        'knife': '包丁',
+        'board': 'まな板',
+        'bowl': 'ボール',
+    })
+
     def __init__(self, data=None, dish_index=0, table=None):
 
         self.dish_id = dish_index
@@ -359,7 +414,7 @@ class Task:
             self.resources = ['user', data.get('resources')]
             self.condition = None
             self.previous = None
-            self.context = data.get('resources') + "を洗う"
+            self.context = "使った" + Task.source_jp.get(re.findall('[a-z]+', data.get('resources'))[0]) + "を洗う"
 
         else:
             self.task_id = data.get('id')
@@ -543,6 +598,9 @@ class RecipeScheduler:
         time_end = time.time()
 
         print(time_end - self.start_time)
+
+        # いい感じに並べ替え
+        self.optimal_schedule.sortTask()
 
         self.result_json["time"] = self.optimal_schedule.finish_time
         self.result_json["procedure"] = self.optimal_schedule.getJson()
