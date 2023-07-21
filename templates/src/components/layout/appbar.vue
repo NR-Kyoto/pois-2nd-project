@@ -113,8 +113,8 @@
 export default {
   data: () => ({
     drawer: null,
-    iconActive: sessionStorage.access,
-    username: sessionStorage.username,
+    username: null,
+    iconActive: null,
     btnItems: [
       {
         text: "Login",
@@ -139,5 +139,11 @@ export default {
       }
     ],
   }),
+
+  created() {
+    this.username = sessionStorage.getItem('username');
+    this.iconActive = sessionStorage.getItem('access');
+  },
+  
 };
 </script>

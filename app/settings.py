@@ -1,11 +1,3 @@
-'''
-Author: dnimo kuochingcha@gmail.com
-Date: 2023-07-04 16:45:24
-LastEditors: dnimo kuochingcha@gmail.com
-LastEditTime: 2023-07-04 23:00:09
-FilePath: /pois-2nd-project/app/settings.py
-Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
-'''
 import datetime
 from pathlib import Path
 
@@ -100,11 +92,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
-# STATIC_ROOT = ''
-STATICFILES_DIRS = (
-    BASE_DIR.joinpath("app/static/"),
-)
+STATIC_URL = '/static/'
+MEDIA_URL = 'dish_images/'
+MEDIA_ROOT = BASE_DIR / 'dish_images'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

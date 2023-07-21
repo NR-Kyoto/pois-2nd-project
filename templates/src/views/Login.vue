@@ -42,27 +42,27 @@ export default {
     };
   },
   methods: {
-      async login() {
-try {
-  const response = await axios.post('http://localhost:8000/login/', {
-    username: this.username,
-    password: this.password,
-  });
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:8000/login/', {
+          username: this.username,
+          password: this.password,
+        });
 
-  sessionStorage.setItem('access', response.data.access);
-  sessionStorage.setItem('refresh', response.data.refresh);
-  sessionStorage.setItem('username', this.username)
+        sessionStorage.setItem('access', response.data.access);
+        sessionStorage.setItem('refresh', response.data.refresh);
+        sessionStorage.setItem('username', this.username)
 
-  this.$router.push('/');
-} catch (error) {
-  console.error('Login failed.');
-  console.error(error.response.data);
-  this.errorMessage = error.response.data.error || 'ログインに失敗しました';
-}
-},
-clearError() {
-this.errorMessage = '';
-},
+        await this.$router.push('/');
+      } catch (error) {
+        console.error('Login failed.');
+        console.error(error.response.data);
+        this.errorMessage = error.response.data.error || 'ログインに失敗しました';
+      }
+    },
+    clearError() {
+      this.errorMessage = '';
+    },
   },
 };
 </script>

@@ -59,7 +59,7 @@
                           class="elevation-2"
                           gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                           height="200px"
-                          src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                          :src="`http://localhost:8000/${item.dish_image}`"
                           style="border-radius: 16px"
                       >
                         <v-card-text>
@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="text-body-1 py-4">
-                          {{ item.dish_id }}
+                          {{ item.dish_image }}
                         </div>
 
                         <div class="d-flex align-center">
@@ -114,11 +114,15 @@ export default {
       detail_dish_names: [],
       detail_procedure: {},
       detail_ingredient: {},
-      detail_all_time: null
+      detail_all_time: null,
+      iconActive: null,
+      username: null,
     };
   },
 
   async created() {
+    this.iconActive = sessionStorage.access;
+    this.username = sessionStorage.username;
     try {
       const token = sessionStorage.getItem("access");
       const config = {
@@ -147,7 +151,7 @@ export default {
     },
 
     hold(input){
-      this.dish_name_set.push(input.dish_name);
+      this.dish_name_set.push(input);
       this.recipes["recipes"].push(input.dish_id);
     }
   },
