@@ -3,6 +3,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "鯖の塩焼き",
+            "image": "static/app/dish_images/mackerel.jpg",
             "manual": {
                 "ingredient": {
                     "鯖": {
@@ -64,6 +65,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "春雨サラダ",
+            "image": "static/app/dish_images/harusame.jpg",
             "manual": {
                 "ingredient": {
                     "春雨": {
@@ -139,6 +141,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "味噌汁",
+            "image": "static/app/dish_images/misosoup.jpg",
             "manual": {
                 "ingredient": {
                     "油揚げ": {
@@ -199,6 +202,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "豚の生姜焼き",
+            "image": "static/app/dish_images/grilledpork.jpg",
             "manual": {
                 "ingredient": {
                     "豚ロース": {
@@ -289,6 +293,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "カレーライス",
+            "image": "static/app/dish_images/curryrice.jpg",
             "manual": {
                 "ingredient": {
                     "豚肉": {
@@ -366,6 +371,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "サラダ",
+            "image": "static/app/dish_images/salad.png",
             "manual": {
                 "ingredient": {
                     "レタス": {
@@ -427,6 +433,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "うどん",
+            "image": "static/app/dish_images/udon.png",
             "manual": {
                 "ingredient": {
                     "うどん": {
@@ -529,7 +536,8 @@
     {
         "model": "recipe.Dish",
         "fields":{
-            "dish_name": "ハンバーガー",
+            "dish_name": "ハンバーグ",
+            "image": "static/app/dish_images/hamburge.png",
             "manual": {
                 "ingredient": {
                     "合いびき肉": {
@@ -659,6 +667,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "コンソメスープ",
+            "image": "static/app/dish_images/soup.png",
             "manual": {
                 "ingredient": {
                     "キャベツ": {
@@ -736,6 +745,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "たまごやき",
+            "image": "static/app/dish_images/omelet.png",
             "manual": {
                 "ingredient": {
                     "卵": {
@@ -792,6 +802,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "ピーマンの肉巻き",
+            "image": "static/app/dish_images/meatroll.png",
             "manual": {
                 "ingredient": {
                     "豚バラ肉": {
@@ -871,6 +882,7 @@
         "model": "recipe.Dish",
         "fields":{
             "dish_name": "カレイのムニエル",
+            "image": "static/app/dish_images/meuniere.png",
             "manual": {
                 "ingredient": {
                     "カレイ": {

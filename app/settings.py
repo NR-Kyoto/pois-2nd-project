@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-6*+dmjg63yaj2q@syz6h9=3^-!@qq0vndk=p41q*$6@zktk=8-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,8 +27,7 @@ INSTALLED_APPS = (
     'corsheaders',
     'app.login',
     'app.recipe',
-    'app.recommend',
-    'app'
+    'app.recommend'
 )
 
 # TEMPLATE_LOADERS = (
@@ -53,7 +52,7 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -102,7 +101,14 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+# STATIC_ROOT = ''
+STATICFILES_DIRS = (
+    BASE_DIR.joinpath("app/static/"),
+)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = "./app/login/"
+LOGIN_URL = "/login/"
+
+# MEDIA_ROOT = BASE_DIR.joinpath('app/media/')
+# MEDIA_URL = '/media/'
