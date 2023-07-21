@@ -145,7 +145,7 @@ def get_menu_history(request) -> list:
     for menu in menu_sets:
         
         dishes = MenuDetail.objects.filter(menu=menu).values_list("dish")
-        menu_dict = {"date":menu.date, "dish_names":[d.name for d in dishes]}
+        menu_dict = {"date":menu.date, "dish_names":[d.dish_name for d in dishes]}
         history_list.append(menu_dict)
         
     return history_list
