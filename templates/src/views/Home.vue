@@ -12,12 +12,12 @@
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
-              <v-col>
+              <!-- <v-col>
                 <v-btn color="secondary" to="category">More</v-btn>
-              </v-col>
-              <v-col cols="12" lg="8" md="10" xl="7">
+              </v-col> -->
+              <v-col cols="12" lg="10" md="10" xl="7">
                 <h2 class="text-h3 py-3" style="line-height: 1.2">
-                  健康な食事は、あなたに幸せと健康を与えてくれます。
+                  食べたいものを作って食べて健康に
                 </h2>
               </v-col>
               <v-col class="d-flex align-center">
@@ -25,7 +25,7 @@
                   <v-icon large>mdi-feather</v-icon>
                 </v-avatar-->
 
-                <div class="text-h6 pl-2">Create By Pois</div>
+                <div class="text-h6 pl-2">Create By team 9</div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -37,7 +37,7 @@
       <v-col cols="12" lg="12" xl="8">
         <div>
           <div class="pt-16">
-            <h2 class="text-h4 font-weight-bold pb-4">Recommended For You</h2>
+            <h2 class="text-h4 font-weight-bold pb-4">レシピ一覧</h2>
 
             <v-row>
               <v-col v-for="item in dish_list" :key="item.dish_id" cols="12" lg="4" md="6">
@@ -73,14 +73,14 @@
                         </div>
 
                         <div class="text-body-1 py-4">
-                          {{ item.dish_id }}
+                          {{ item.dish_id }} <!-- ingredient -->
                         </div>
 
                         <div class="d-flex align-center">
-                          <v-avatar color="secondary" size="36">
+                          <!-- <v-avatar color="secondary" size="36">
                             <v-icon dark>mdi-food-fork-drink</v-icon>
-                          </v-avatar>
-                          <div class="mr-auto pl-2">Tools</div>
+                          </v-avatar> -->
+                          <div class="mr-auto pl-2"></div>
                           <div class="p2"><v-btn color="secondary" size="small" @click="hold(item)"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
                       </v-card-text>

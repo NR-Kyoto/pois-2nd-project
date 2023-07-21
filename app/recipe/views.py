@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -14,6 +14,8 @@ from app.recommend.models import RecipeGraph
 
 from rest_framework.views import APIView
 from rest_framework import status
+
+import json
 
 class MergeRecipes(APIView):
     
@@ -65,12 +67,6 @@ class getRecipe(APIView):
             },
             status=status.HTTP_200_OK
         )
-
-
-from django.http import HttpResponse, HttpRequest
-from app.recipe.models import Menu, MenuDetail, Dish, CookingTool
-from app.recommend.models import RecipeGraph
-import json
 
 def cal_total_time(dish_id: int) -> int:
     '''
