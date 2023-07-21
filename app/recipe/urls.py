@@ -3,7 +3,7 @@ from .views import MergeRecipes, RegistMenu, SearchDish, ShowDishInfo, ShowCooki
 
 urlpatterns = [
     path('regist_menu/', RegistMenu.as_view(), name='regist_menu'),
-    path('search_dish/', SearchDish, name='search_dish'),
+    path('search_dish/', SearchDish.as_view(), name='search_dish'),
     path('show_dish_info/', ShowDishInfo.as_view(), name='show_dish_info'),
     path('show_cookingtool_info', ShowCookingToolInfo.as_view(), name='show_cookingtool_info'),
     path('regist_cookingtool_info/', RegistCookingToolInfo.as_view(), name='regist_cookingtool_info'),
