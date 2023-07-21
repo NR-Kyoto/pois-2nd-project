@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <p class="text-h5 font-weight-bold primary--text pt-4">{{ dish_names }}</p>
+    <p class="text-h5 font-weight-bold primary--text pt-4">Time Cost:{{ time }} Seconds</p>
   <v-timeline
         align-top
         dense
@@ -6,14 +9,14 @@
         <v-timeline-item
           color="pink"
           small
-          v-for="i in 6" :key="i"
+          v-for="item in procedure"
         >
           <v-row class="pt-1">
             <v-col cols="3">
-              <strong>5pm</strong>
+              <strong>{{ item.time }}</strong>
             </v-col>
             <v-col>
-              <strong>New Icon</strong>
+              <strong>{{ item.context }}</strong>
               <div class="text-caption">
                 Mobile App
               </div>
@@ -21,7 +24,7 @@
           </v-row>
         </v-timeline-item>
 
-        <v-timeline-item
+        <!-- <v-timeline-item
           color="teal lighten-3"
           small
         >
@@ -82,12 +85,25 @@
               </div>
             </v-col>
           </v-row>
-        </v-timeline-item>
+        </v-timeline-item> -->
       </v-timeline>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "Category",
+  name: "Detail",
+
+  data: () => ({
+    dish_names: sessionStorage.getItem('dish_names'),
+    procedure: JSON.parse(sessionStorage.getItem('procedure')),
+    ingredient: JSON.parse(sessionStorage.getItem('ingredient')),
+    time: sessionStorage.getItem('time')
+  }),
+
+
+  async created () {
+    console.log(this.procedure)
+  }
 };
 </script>

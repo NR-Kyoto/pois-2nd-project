@@ -60,8 +60,8 @@
                 @click="$router.push('/')"
             >
               <v-icon color="primary" large>mdi-feather</v-icon>
-              Pois
-              <span class="accent--text">Potrol</span>
+              App
+              <span class="accent--text">Title</span>
             </v-toolbar-title>
           </v-col>
 
@@ -96,8 +96,6 @@
           </v-col>
           <v-col v-if="iconActive" class="text-right">
             <v-btn
-                :color="primary"
-                :target="_block"
                 :to="`/authors`"
                 class="ml-3 text-capitalize"
             >
@@ -115,8 +113,8 @@
 export default {
   data: () => ({
     drawer: null,
-    iconActive: localStorage.access,
-    username: localStorage.username,
+    iconActive: sessionStorage.access,
+    username: sessionStorage.username,
     btnItems: [
       {
         text: "Login",
@@ -132,8 +130,8 @@ export default {
         to: "/",
       },
       {
-        title: "Single",
-        to: "/single",
+        title: "Search",
+        to: "/search",
       },
       {
         title: "Detail",
