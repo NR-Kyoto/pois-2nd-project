@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CheckBoxUI :main-data="dish_name_set" :recipes="recipes" @msg-send="messageSendHandler"/>
+    <CheckBoxUI :main-data="dish_name_set" :recipes="recipes" @delete-recipe="deleteCheck" @msg-send="messageSendHandler"/>
     <div>
       <v-card to="detail">
         <v-img
@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="text-body-1 py-4">
-                          {{ item.dish_id }} <!-- ingredient -->
+                          {{ item.ingredient }}
                         </div>
 
                         <div class="d-flex align-center">
@@ -124,13 +124,12 @@ export default {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
         };
-      const response = await axios.get("http://localhost:8000/recipe/getRecipe/", config);
+      const response = await axios.get("http://localhost:8000/recipe/get_recipes/", config);
       this.dish_list = response.data.dish_list;
     } catch(error) {
       console.error(error)
     }
   },
-
   methods: {
     async messageSendHandler(value) {
       this.detail_dish_names = value.data.dish_names;
@@ -149,6 +148,11 @@ export default {
     hold(input){
       this.dish_name_set.push(input.dish_name);
       this.recipes["recipes"].push(input.dish_id);
+    },
+
+    deleteCheck(i) {
+      this.dish_name_set.splice(i, 1);
+      this.recipes["recipes"].splice(i, 1);
     }
   },
 };

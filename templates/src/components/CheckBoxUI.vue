@@ -13,12 +13,12 @@
             <v-col v-for="(item, index) in mainData" :key="index" cols="12">
               <v-card>
                 <v-img :aspect-ratio="16 / 9" src="https://i.epochtimes.com/assets/uploads/2022/06/id13756674-1101040220271528-600x400.jpg">
+                  <v-card-text>
+                    <v-btn color="primary" v-on:click="deleteCheck(index)">delete</v-btn>
+                  </v-card-text>
               </v-img>
               <v-card-text class="text-center">
                 <p><v-icon>mdi-chef-hat</v-icon>&nbsp;{{ item }}</p>
-                //- <p><v-icon>mdi-food-apple</v-icon>&nbsp;{{ item.ingredient }}</p>
-                //- <p><v-icon>mdi-timer-alert-outline</v-icon>&nbsp;{{ item.time }}</p>
-                //- <p><v-icon>mdi-food-fork-drink</v-icon>&nbsp;{{ item.tool }}</p>
               </v-card-text>
               </v-card>
             </v-col>
@@ -163,6 +163,11 @@ export default {
       }
     },
 
+    deleteCheck (index) {
+      const i = index
+      this.$emit('delete-recipe', i)
+    },
+
     botToggle () {
       this.botActive = !this.botActive
 
@@ -182,7 +187,7 @@ export default {
         const config = {
         headers: { Authorization: `Bearer ${token}` },
         };
-        const response = await axios.post("http://localhost:8000/recipe/mergeRecipe", this.recipes, config)
+        const response = await axios.post("http://localhost:8000/recipe/merge/", this.recipes, config)
         this.$emit('msg-send', response);
         this.recipes = null;
         this.mainData = null;

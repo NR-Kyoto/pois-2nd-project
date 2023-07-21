@@ -32,8 +32,8 @@ class MergeRecipes(APIView):
             return Response({"error": "No recipes"}, status=HTTP_406_NOT_ACCEPTABLE)
 
         try:
-            # scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'], limit_time=20)
-            scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'])
+            scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'], limit_time=20)
+            # scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'])
             schedule = scheduler.scheduling()
 
             del scheduler 
@@ -59,7 +59,8 @@ class getRecipe(APIView):
                 "dish_list": [
                     {
                         "dish_id": dish.dish_id,
-                        "dish_name": dish.dish_name
+                        "dish_name": dish.dish_name,
+                        "ingredient": ', '.join(dish.manual["ingredient"].keys())
                     }
                     for dish in dish_list
                 ]
