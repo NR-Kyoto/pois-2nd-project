@@ -4,7 +4,6 @@
       <v-col cols="12" lg="12" xl="8">
         <div>
           <div>
-            <!--v-divider class="my-4"></v-divider-->
 
             <v-row>
               <v-col>

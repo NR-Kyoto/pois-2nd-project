@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpRequest, HttpResponse
-from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 
 from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_406_NOT_ACCEPTABLE
@@ -27,7 +26,8 @@ class MergeRecipes(APIView):
             return Response({"error": "No recipes"}, status=HTTP_406_NOT_ACCEPTABLE)
 
         try:
-            scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'])
+            scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'], limit_time=20)
+            # scheduler = RecipeScheduler(user=request.user, dishes=request.data['recipes'])
             schedule = scheduler.scheduling()
 
             del scheduler 
@@ -38,13 +38,29 @@ class MergeRecipes(APIView):
             print(e)
             return Response({"error": "cannot make scheduler"}, status=HTTP_406_NOT_ACCEPTABLE)
 
-def check_is_authenticated(func):
-    '''ユーザの認証チェック'''
-    def wrapper(request, *args, **kwargs):
+# get all of the menu
+
+class getRecipe(APIView):
+
+
+    def get(self, request, *args, **kwargs):
+
         if not request.user.is_authenticated:
             return Response(status=HTTP_401_UNAUTHORIZED)
-        func(request, *args, **kwargs)
-    return wrapper
+
+        dish_list = Dish.objects.all()
+        return Response(
+            {
+                "dish_list": [
+                    {
+                        "dish_id": dish.dish_id,
+                        "dish_name": dish.dish_name
+                    }
+                    for dish in dish_list
+                ]
+            },
+            status=status.HTTP_200_OK
+        )
 
 def cal_total_time(dish_id: int) -> int:
     '''
@@ -172,7 +188,7 @@ def make_or_update_cookingtool_info(request, tool_info_input:dict=None) -> None:
     tool_info = get_cookingtool_info(request.user)
     if type(tool_info) is dict:
         tool_info.update(tool_info_input)
-    
+
     obj.kitchen_knife = tool_info["kitchen_knife"]
     obj.cutting_board = tool_info["cutting_board"]
     obj.flying_pan = tool_info["flying_pan"]
@@ -293,7 +309,7 @@ class ShowDishInfo(APIView):
         body = json.loads(request.body)
         d = get_dish_detail_info(body["id"], get_host_url(request))
         return Response(json.dumps(d, ensure_ascii=False))
-    
+
 class ShowCookingToolInfo(APIView):
 
     def get(self, request, *args, **kwargs):

@@ -34,6 +34,12 @@
                         class="elevation-2"
                         style="border-radius: 16px"
                       >
+                        <v-card-text>
+                          <!--v-btn color="accent">ANIMAL</v-btn-->
+                          <div class="text-h5 font-weight-bold white--text">
+                          Recipe image must be here
+                          </div>
+                        </v-card-text>
                       </v-img>
 
                       <v-card-text>
@@ -46,6 +52,9 @@
                         </div>
 
                         <div class="d-flex align-center">
+                          <v-avatar color="accent" size="36">
+                            <v-icon dark>mdi-feather</v-icon>
+                          </v-avatar>
 
                           <div class="pl-2">Contributer name · Posted date</div>
                         </div>
