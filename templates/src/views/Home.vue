@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <div class="mr-auto pl-2"></div>
+                          <div class="mr-auto pl-2"><v-icon>mdi-timer-alert-outline</v-icon>&nbsp;{{ item.time }} 分</div>
                           <div class="p2"><v-btn color="secondary" size="small" @click="hold(item)"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
                       </v-card-text>

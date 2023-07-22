@@ -62,7 +62,7 @@ class getRecipe(APIView):
                         "ingredient": ', '.join(dish.manual["ingredient"].keys()),
                         "dish_image": dish.image,
                         "dish_manual": dish.manual,
-                        "time": cal_total_time(dish.dish_id) / 60
+                        "time": round(cal_total_time(dish.dish_id) / 60)
                     }
                     for dish in dish_list
                 ]
