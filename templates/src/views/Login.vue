@@ -15,6 +15,7 @@
                 outlined
             ></v-text-field>
             <v-text-field
+                type="password"
                 v-model="password"
                 label="Password"
                 outlined
@@ -43,22 +44,22 @@ export default {
   },
   methods: {
       async login() {
-try {
-  const response = await axios.post('http://localhost:8000/login/', {
-    username: this.username,
-    password: this.password,
-  });
+        try {
+          const response = await axios.post('http://localhost:8000/login/', {
+            username: this.username,
+            password: this.password,
+          });
 
-  sessionStorage.setItem('access', response.data.access);
-  sessionStorage.setItem('refresh', response.data.refresh);
-  sessionStorage.setItem('username', this.username)
+          window.sessionStorage.setItem('access', response.data.access);
+          sessionStorage.setItem('refresh', response.data.refresh);
+          sessionStorage.setItem('username', this.username)
 
-  this.$router.push('/');
-} catch (error) {
-  console.error('Login failed.');
-  console.error(error.response.data);
-  this.errorMessage = error.response.data.error || 'ログインに失敗しました';
-}
+          window.location.href = "/";
+        } catch (error) {
+          console.error('Login failed.');
+          console.error(error.response.data);
+          this.errorMessage = error.response.data.error || 'ログインに失敗しました';
+        }
 },
 clearError() {
 this.errorMessage = '';
