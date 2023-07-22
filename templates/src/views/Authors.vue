@@ -5,30 +5,6 @@
         <div>
           <div>
 
-            <div class="my-4">
-              <h2 class="text-h4 font-weight-bold">Environment</h2>
-            </div>
-
-            <div class="py-4">
-                  <v-alert
-                    class="text-h3 font-weight-bold text-center"
-                    border="left"
-                    colored-border
-                    color="accent"
-                    style="line-height: 1.5;"
-                  >
-                    ? knives<br>
-                    ? cutting boards<br>
-                    ? stoves<br>
-                  </v-alert>
-              </div>
-
-            <div class="my-4">
-              <h2 class="text-h4 font-weight-bold">History</h2>
-            </div>
-
-            <!--v-divider class="my-4"></v-divider-->
-
             <v-row>
               <v-col>
                   <div>
@@ -40,9 +16,6 @@
                         class="elevation-2"
                         style="border-radius: 16px"
                       >
-                        <div class="text-h5 font-weight-bold white--text text-center">
-                          Recipe image must be here
-                        </div>
                       </v-img>
 
                       <v-card-text class="text-center">
@@ -143,14 +116,16 @@
         </div>
       </v-col>
     </v-row>
-    <v-btn
-        class="flex-grow-1"
-        height="48"
-        variant="tonal"
-        @click="logout"
-      >
-        logout
-      </v-btn>
+    <div class="center">
+      <v-btn
+          class="flex-grow-1"
+          height="48"
+          variant="tonal"
+          @click="logout"
+        >
+          logout
+        </v-btn>
+    </div>
   </div>
 </template>
 
@@ -158,7 +133,7 @@
 export default {
   name: "Category",
   data: () => ({
-    username: localStorage.username,
+    username: sessionStorage.username,
 
   }),
   async created () {
@@ -175,7 +150,7 @@ export default {
   },
   methods: {
     logout () {
-      localStorage.clear();
+      sessionStorage.clear();
       this.$router.push('/')
     }
   }

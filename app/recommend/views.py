@@ -21,7 +21,7 @@ def recommend_recipe(request) -> HttpResponse:
     return HttpResponse(json.dumps(d_list, ensure_ascii=False))
 
 class RecommendRecipe(APIView):
-    
+
     def get(self, request, *args, **kwargs):
         body = json.loads(request.body)
         recommend_recipe_list = make_recommend_list(body)

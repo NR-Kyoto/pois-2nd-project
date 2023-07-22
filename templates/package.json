@@ -28,7 +28,7 @@
     "vuetify": "^2.6.0"
   },
   "devDependencies": {
-    "sass": "^1.63.6",
+    "sass": "1.32.12",
     "sass-loader": "^10",
     "unplugin-vue-components": "^0.17.15",
     "vite": "^2.7.13",

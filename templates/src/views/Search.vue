@@ -52,9 +52,9 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <!--v-avatar color="accent" size="36">
+                          <v-avatar color="accent" size="36">
                             <v-icon dark>mdi-feather</v-icon>
-                          </v-avatar-->
+                          </v-avatar>
 
                           <div class="pl-2">Contributer name · Posted date</div>
                         </div>

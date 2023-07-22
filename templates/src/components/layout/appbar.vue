@@ -113,8 +113,8 @@
 export default {
   data: () => ({
     drawer: null,
-    //iconActive: sessionStorage.access,
-    //username: sessionStorage.username,
+    username: null,
+    iconActive: null,
     btnItems: [
       {
         text: "Login",
@@ -139,15 +139,18 @@ export default {
       }
     ],
   }),
-  computed: {
-    iconActive() {
-      return sessionStorage.access;
-    },
-    username() {
-      return sessionStorage.username;
-    }
-  },
+  // computed: {
+  //   iconActive() {
+  //     return sessionStorage.access;
+  //   },
+  //   username() {
+  //     return sessionStorage.username;
+  //   }
+  // },
   created() {
+    this.username = sessionStorage.getItem('username');
+    this.iconActive = sessionStorage.getItem('access');
+
     window.addEventListener('storage', this.handleStorageChange);
   },
   beforeDestroy() {

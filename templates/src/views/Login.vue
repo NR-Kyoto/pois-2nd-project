@@ -43,27 +43,27 @@ export default {
     };
   },
   methods: {
-      async login() {
-        try {
-          const response = await axios.post('http://localhost:8000/login/', {
-            username: this.username,
-            password: this.password,
-          });
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:8000/login/', {
+          username: this.username,
+          password: this.password,
+        });
 
-          window.sessionStorage.setItem('access', response.data.access);
-          sessionStorage.setItem('refresh', response.data.refresh);
-          sessionStorage.setItem('username', this.username)
+        window.sessionStorage.setItem('access', response.data.access);
+        sessionStorage.setItem('refresh', response.data.refresh);
+        sessionStorage.setItem('username', this.username)
 
-          window.location.href = "/";
-        } catch (error) {
-          console.error('Login failed.');
-          console.error(error.response.data);
-          this.errorMessage = error.response.data.error || 'ログインに失敗しました';
-        }
-},
-clearError() {
-this.errorMessage = '';
-},
+        window.location.href = "/";
+      } catch (error) {
+        console.error('Login failed.');
+        console.error(error.response.data);
+        this.errorMessage = error.response.data.error || 'ログインに失敗しました';
+      }
+    },
+    clearError() {
+      this.errorMessage = '';
+    },
   },
 };
 </script>

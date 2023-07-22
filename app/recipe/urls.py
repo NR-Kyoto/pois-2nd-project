@@ -9,8 +9,6 @@ urlpatterns = [
     path('regist_cookingtool_info/', RegistCookingToolInfo.as_view(), name='regist_cookingtool_info'),
     path('show_menu_history/', ShowMenuHistory.as_view(), name='show_menu_history'),
     path('get_image_url/', GetDishImageURL.as_view(), name='get_dish_image_url'),
-    
-    path('get_recipes/', getRecipe.as_view(), name='get_recipes'),
-
-    path('merge/', MergeRecipes.as_view(), name='merge'),
+    path('mergeRecipe/', MergeRecipes.as_view(), name='merge'),
+    path('getRecipe/', getRecipe.as_view(), name='get Recipe'),
 ]

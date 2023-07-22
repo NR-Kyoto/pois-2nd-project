@@ -7,14 +7,11 @@
             :aspect-ratio="16 / 9"
             dark
             gradient="to top, rgba(25,32,72,.7), rgba(25,32,72,.0)"
-            height="500px"
+            height="300px"
             src="https://www.ucsfhealth.org/-/media/project/ucsf/ucsf-health/education/hero/top-ten-foods-for-health-2x.jpg"
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
-              <!-- <v-col>
-                <v-btn color="secondary" to="category">More</v-btn>
-              </v-col> -->
               <v-col cols="12" lg="10" md="10" xl="7">
                 <h2 class="text-h3 py-3" style="line-height: 1.2">
                   食べたいものを作って食べて健康に
@@ -25,7 +22,7 @@
                   <v-icon large>mdi-feather</v-icon>
                 </v-avatar-->
 
-                <div class="text-h6 pl-2">Create By team 9</div>
+                <div class="text-h6 pl-2">Create By Team 9</div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -59,7 +56,7 @@
                           class="elevation-2"
                           gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                           height="200px"
-                          src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                          :src="`http://localhost:8000/${item.dish_image}`"
                           style="border-radius: 16px"
                       >
                         <v-card-text>
@@ -77,9 +74,6 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <!-- <v-avatar color="secondary" size="36">
-                            <v-icon dark>mdi-food-fork-drink</v-icon>
-                          </v-avatar> -->
                           <div class="mr-auto pl-2"></div>
                           <div class="p2"><v-btn color="secondary" size="small" @click="hold(item)"><v-icon dark>mdi-plus</v-icon></v-btn></div>
                         </div>
@@ -114,17 +108,21 @@ export default {
       detail_dish_names: [],
       detail_procedure: {},
       detail_ingredient: {},
-      detail_all_time: null
+      detail_all_time: null,
+      iconActive: null,
+      username: null,
     };
   },
 
   async created() {
+    this.iconActive = sessionStorage.access;
+    this.username = sessionStorage.username;
     try {
       const token = sessionStorage.getItem("access");
       const config = {
         headers: { Authorization: `Bearer ${token}` },
         };
-      const response = await axios.get("http://localhost:8000/recipe/get_recipes/", config);
+      const response = await axios.get("http://localhost:8000/recipe/getRecipe/", config);
       this.dish_list = response.data.dish_list;
     } catch(error) {
       console.error(error)
@@ -146,7 +144,7 @@ export default {
     },
 
     hold(input){
-      this.dish_name_set.push(input.dish_name);
+      this.dish_name_set.push(input);
       this.recipes["recipes"].push(input.dish_id);
     },
 
