@@ -204,7 +204,7 @@ def make_or_update_cookingtool_info(request, tool_info_input: dict = None) -> No
         "stove" : int #コンロ
     }
     '''
-    obj, is_created = CookingTool.objects.get_or_create(user=request.user)  # デフォルトは全部 0
+    obj, is_created = CookingTool.objects.get_or_create(user=request.user)  # デフォルトは全部 1
     tool_info = get_cookingtool_info(request.user)
     if type(tool_info) is dict:
         tool_info.update(tool_info_input)

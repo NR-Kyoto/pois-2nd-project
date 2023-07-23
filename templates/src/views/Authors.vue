@@ -37,9 +37,57 @@
 
                       <div class="d-flex algin-center">
                         <div><h2 class="text-h4 font-weight-bold">Tools</h2></div>
-                        <div class="pl-2">
-                          <v-btn color="primary">Edit</v-btn>
 
+                        <div class="pl-2">
+                          <v-btn color="primary" v-on:click="openModal">Edit</v-btn>
+                          
+                         <div id="overlay" v-show="showContent">
+                          <div id="content">
+                            <v-form ref="form">
+                              <v-row cols="6" lg="6" xl="4">
+                                <v-text-field
+                                    v-model.number="kitchen_knife"
+                                    :label="user_tools_name[0]"
+                                    type="number"
+                                    outlined
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model.number="cutting_board"
+                                    :label="user_tools_name[1]"
+                                    type="number"
+                                    outlined
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model.number="flying_pan"
+                                    :label="user_tools_name[2]"
+                                    type="number"
+                                    outlined
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model.number="sauce_pan"
+                                    :label="user_tools_name[3]"
+                                    type="number"
+                                    outlined
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model.number="bowl"
+                                    :label="user_tools_name[4]"
+                                    type="number"
+                                    outlined
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model.number="stove"
+                                    :label="user_tools_name[5]"
+                                    type="number"
+                                    outlined
+                                ></v-text-field>
+                              </v-row>
+                            </v-form>
+                            <v-btn color="primary" v-on:click="editTools">Edit</v-btn>&nbsp;
+                            <v-btn v-on:click="closeModal">close</v-btn>
+                          </div>
+                         </div>
+                         
                         </div>
                       </div>
                       
@@ -112,8 +160,17 @@ export default {
   data: () => ({
     username: sessionStorage.username,
     user_tools_name: ['包丁', 'まな板', 'フライパン', '鍋', 'ボール', 'コンロ'],
+    user_tools_name_en: [],
     user_tools_num: [],
     menu_history: [],
+    showContent: false,
+
+    kitchen_knife: 0,
+    cutting_board: 0,
+    flying_pan: 0, 
+    sauce_pan: 0,
+    bowl: 0,
+    stove: 0
   }),
   async created () {
     try {
@@ -123,6 +180,7 @@ export default {
         };
       const response1 = await axios.get("http://localhost:8000/recipe/show_cookingtool_info", config)
       this.user_tools_num = Object.values(JSON.parse(response1.data))
+      this.user_tools_name_en = Object.keys(JSON.parse(response1.data))
 
       const response2 = await axios.get("http://localhost:8000/recipe/show_menu_history", config)
       this.menu_history = JSON.parse(response2.data)
@@ -138,15 +196,52 @@ export default {
         }
 
         this.menu_history[i].ids = ids
+
+        this.kitchen_knife = this.user_tools_num[0]
+        this.cutting_board = this.user_tools_num[1]
+        this.flying_pan = this.user_tools_num[2]
+        this.sauce_pan = this.user_tools_num[3]
+        this.bowl = this.user_tools_num[4]
+        this.stove = this.user_tools_num[5]
       }
     }catch (error) {
       console.log(error)
     }
   },
   methods: {
+    
+    openModal: function(){
+      this.showContent = true
+    },
+    closeModal: function(){
+      this.showContent = false
+    },
+    async editTools () {
+      
+      const token = sessionStorage.getItem("access");
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        };
+
+      const data = {
+        kitchen_knife: this.kitchen_knife,
+        cutting_board: this.cutting_board,
+        flying_pan: this.flying_pan,
+        sauce_pan: this.sauce_pan,
+        bowl: this.bowl,
+        stove: this.stove,
+      };
+      
+      const response = await axios.post("http://localhost:8000/recipe/regist_cookingtool_info/", data, config);
+      
+      this.showContent = false
+
+      this.$router.go({path: this.$router.currentRoute.path, force: true})
+    },
+
     logout () {
       sessionStorage.clear();
-      this.$router.push('/')
+      window.location.href = "/";
     },
     async sendMessage (id_list) {
       if (id_list.lenght != 0) {
@@ -167,5 +262,29 @@ export default {
   position: relative;
   top: -50px;
   margin-bottom: -50px;
+}
+
+#overlay{
+  /*　要素を重ねた時の順番　*/
+  z-index:1;
+
+  /*　画面全体を覆う設定　*/
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.5);
+
+  /*　画面の中央に要素を表示させる設定　*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#content {
+  z-index: 2;
+  width: 50%;
+  padding: 1em;
+  background: #fff;
 }
 </style>
