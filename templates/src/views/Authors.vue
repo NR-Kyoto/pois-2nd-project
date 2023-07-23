@@ -22,6 +22,17 @@
                         <div class="text-body-1 py-4">
                           Kyoto University Inforamtics Student M1
                         </div>
+
+                        <div>
+                          <v-btn
+                              class="flex-grow-1"
+                              height="40"
+                              variant="tonal"
+                              @click="logout"
+                            >
+                              logout
+                            </v-btn>
+                        </div>
                       </v-card-text>
 
                       <div class="d-flex algin-center">
@@ -42,11 +53,11 @@
                       </v-row>
                       <v-divider class="my-4"></v-divider>
 
-                      <h2 class="text-h4 font-weight-bold">Order Record</h2>
+                      <h2 class="text-h4 font-weight-bold">履歴</h2>
                       <v-divider class="my-4"></v-divider>
                       
                       <v-row cols="12" lg="12" xl="8">
-                        <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+                        <v-col v-for="item in menu_history.slice(0, Math.min(menu_history.length, 6))" cols="12" lg="4" md="6">
                           <v-hover
                             v-slot:default="{ hover }"
                             open-delay="50"
@@ -64,19 +75,18 @@
                                 class="elevation-2"
                                 gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                                 height="200px"
-                                src="https://i.epochtimes.com/assets/uploads/2022/06/id13756674-1101040220271528-600x400.jpg"
+                                :src="item.url"
                                 style="border-radius: 16px"
                               >
                               <v-card-text>
-                                <v-btn color="secondary" to="category">Detial</v-btn>
+                                <v-btn color="secondary" @click="sendMessage(item.ids)">Make</v-btn>
                               </v-card-text>
                             </v-img>
                               <v-card-text>
                                 <div class="d-flex align-center">
-                                  <v-avatar color="secondary" size="36">
-                                  <v-icon dark>mdi-feather</v-icon>
-                                  </v-avatar>
-                                  <div class="pl-2">Yan Lee · 22 July 2019</div>
+                                  <div class="pl-2">
+                                    <li v-for="name in item.dish_names">{{ name }}</li>
+                                  </div>
                                 </div>
                               </v-card-text>
                             </div>
@@ -91,16 +101,6 @@
         </div>
       </v-col>
     </v-row>
-    <div class="center">
-      <v-btn
-          class="flex-grow-1"
-          height="48"
-          variant="tonal"
-          @click="logout"
-        >
-          logout
-        </v-btn>
-    </div>
   </div>
 </template>
 
@@ -113,6 +113,7 @@ export default {
     username: sessionStorage.username,
     user_tools_name: ['包丁', 'まな板', 'フライパン', '鍋', 'ボール', 'コンロ'],
     user_tools_num: [],
+    menu_history: [],
   }),
   async created () {
     try {
@@ -123,7 +124,21 @@ export default {
       const response1 = await axios.get("http://localhost:8000/recipe/show_cookingtool_info", config)
       this.user_tools_num = Object.values(JSON.parse(response1.data))
 
-      // const response = await axios.get("http://localhost:8000/recipe/getRecipe/get_menu_history", config)
+      const response2 = await axios.get("http://localhost:8000/recipe/show_menu_history", config)
+      this.menu_history = JSON.parse(response2.data)
+      
+      for (let i = 0; i < this.menu_history.length; i++) {
+        let ids = []
+        for (let j = 0; j < this.menu_history[i].dish_names.length; j++) {
+          let response3 = await axios.post("http://localhost:8000/recipe/search_dish/", {search_str: this.menu_history[i].dish_names[j]}, config)
+          
+          let datas = JSON.parse(response3.data)
+          if (j == 0) this.menu_history[i].url = datas[0].img_url
+          ids.push(datas[0].id)
+        }
+
+        this.menu_history[i].ids = ids
+      }
     }catch (error) {
       console.log(error)
     }
@@ -132,6 +147,16 @@ export default {
     logout () {
       sessionStorage.clear();
       this.$router.push('/')
+    },
+    async sendMessage (id_list) {
+      if (id_list.lenght != 0) {
+        const token = sessionStorage.getItem("access");
+        const config = {
+          headers: { Authorization: `Bearer ${token}` },
+        };
+        const response = await axios.post("http://localhost:8000/recipe/mergeRecipe/", {recipes: id_list}, config)
+        this.$router.push('/detail')
+      }
     },
   }
 };

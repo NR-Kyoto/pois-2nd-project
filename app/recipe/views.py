@@ -37,6 +37,9 @@ class MergeRecipes(APIView):
 
             del scheduler
 
+            
+            register_menu(request, dish_list=[Dish.objects.get(dish_id=dish_id) for dish_id in recipes])
+
             return Response(schedule)
 
         except ValueError as e:
@@ -115,6 +118,7 @@ def get_dish_info(dish: Dish, hosturl) -> dict:
     d["time"] = cal_total_time(dish.dish_id)
     d["ingredient"] = dish.manual["ingredient"]
     d["img_url"] = get_dish_image_url(dish, hosturl)
+    # d["img_url"] = dish.dish_image
     return d
 
 
@@ -158,7 +162,6 @@ def register_menu(request, dish_list: list[Dish]) -> None:
     # RecipeGraphの更新
     update_recipe_graph_table(dish_list)
 
-
 def get_menu_history(request) -> list:
     '''
     username から過去の献立履歴を取得する
@@ -175,8 +178,8 @@ def get_menu_history(request) -> list:
     history_list = []
 
     for menu in menu_sets:
-        dishes = MenuDetail.objects.filter(menu=menu).values_list("dish")
-        menu_dict = {"date": menu.date, "dish_names": [d.dish_name for d in dishes]}
+        dishes = MenuDetail.objects.filter(menu=menu).values("dish")
+        menu_dict = {"date": str(menu.date), "dish_names": [Dish.objects.get(dish_id=d['dish']).dish_name for d in dishes]}
         history_list.append(menu_dict)
 
     return history_list
@@ -231,7 +234,7 @@ def regist_menu(request: HttpRequest) -> HttpResponse:
 
 
 def search_dish(request: HttpRequest) -> HttpResponse:
-    '''
+    '''f
     入力された文字列から部分マッチする料理を検索する
     '''
     if request.method == 'POST':
@@ -303,7 +306,7 @@ class RegistMenu(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            body = json.loads(request.body)
+            body = json.loads(request)
             dish_obj_list = [Dish.objects.get(dish_id=id) for id in body]
             register_menu(request, dish_obj_list)
             return Response(json.dumps({"result": "Success"}, ensure_ascii=False))
@@ -314,11 +317,11 @@ class RegistMenu(APIView):
 
 class SearchDish(APIView):
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
             body = json.loads(request.body)
             hosturl = get_host_url(request)
-            dishes = Dish.objects.filter(name__contains=body["search_str"]).values_list("dish_name")
+            dishes = Dish.objects.filter(dish_name__contains=body["search_str"])
             out = [get_dish_info(dish, hosturl) for dish in dishes]
             out = json.dumps(out, ensure_ascii=False)
             return Response(out)
