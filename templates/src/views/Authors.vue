@@ -8,17 +8,7 @@
             <v-row>
               <v-col>
                   <div>
-                      <v-img
-                        src="https://www.knt.co.jp/travelguide/kokunai/image/travelguide_043_mv.jpg"
-                        :aspect-ratio="16 / 9"
-                        gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                        height="300px"
-                        class="elevation-2"
-                        style="border-radius: 16px"
-                      >
-                      </v-img>
-
-                      <v-card-text class="text-center">
+                      <v-card-text class="text-center mt-15">
                         <v-avatar color="secondary" size="86" class="authors">
                           <v-icon dark size="64">mdi-account</v-icon>
                         </v-avatar>
@@ -32,36 +22,21 @@
                         <div class="text-body-1 py-4">
                           Kyoto University Inforamtics Student M1
                         </div>
-
-                        <div>
-                          <v-btn icon>
-                            <v-icon>mdi-facebook</v-icon>
-                          </v-btn>
-
-                          <v-btn icon>
-                            <v-icon>mdi-twitter</v-icon>
-                          </v-btn>
-
-                          <v-btn icon>
-                            <v-icon>mdi-youtube</v-icon>
-                          </v-btn>
-
-                          <v-btn icon>
-                            <v-icon>mdi-instagram</v-icon>
-                          </v-btn>
-                        </div>
                       </v-card-text>
 
                       <div class="d-flex algin-center">
                         <div><h2 class="text-h4 font-weight-bold">Tools</h2></div>
-                        <div class="pl-2"><v-btn color="primary">Edit</v-btn></div>
+                        <div class="pl-2">
+                          <v-btn color="primary">Edit</v-btn>
+
+                        </div>
                       </div>
                       
                       <v-divider class="my-4"></v-divider>
                       <v-row cols="6" lg="6" xl="4">
                         <v-col v-for="i in 6" :key="i" cols="6" lg="4" md="6">
                           <v-card>
-                            <v-card-text class="text-center">fork</v-card-text>
+                            <v-card-text class="text-center"><h3>{{ user_tools_name[i-1] }} {{ user_tools_num[i-1] }}</h3></v-card-text>
                           </v-card>
                         </v-col>
                       </v-row>
@@ -130,20 +105,25 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "Category",
   data: () => ({
     username: sessionStorage.username,
-
+    user_tools_name: ['包丁', 'まな板', 'フライパン', '鍋', 'ボール', 'コンロ'],
+    user_tools_num: [],
   }),
   async created () {
     try {
-      const token = localStorage.getItem("access");
+      const token = sessionStorage.getItem("access");
       const config = {
         headers: { Authorization: `Bearer ${token}` },
         };
-      const response = await axios.get("http://localhost:8000/recipe/getRecipe/get_menu_history", config)
-      console.log(response)
+      const response1 = await axios.get("http://localhost:8000/recipe/show_cookingtool_info", config)
+      this.user_tools_num = Object.values(JSON.parse(response1.data))
+
+      // const response = await axios.get("http://localhost:8000/recipe/getRecipe/get_menu_history", config)
     }catch (error) {
       console.log(error)
     }
@@ -152,7 +132,7 @@ export default {
     logout () {
       sessionStorage.clear();
       this.$router.push('/')
-    }
+    },
   }
 };
 </script>
