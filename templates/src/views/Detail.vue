@@ -1,25 +1,26 @@
 <template>
   <div>
     <p class="text-h5 font-weight-bold primary--text pt-4">{{ dish_names }}</p>
-    <p class="text-h5 font-weight-bold primary--text pt-4">Time Cost:{{ time }} Seconds</p>
+    <p class="text-h5 font-weight-bold primary--text pt-4">Time Cost:{{ time_min }} 分</p>
+
   <v-timeline
         align-top
         dense
+        v-for="item in procedure"
       >
         <v-timeline-item
           color="pink"
           small
-          v-for="item in procedure"
         >
           <v-row class="pt-1">
             <v-col cols="3">
-              <strong>{{ item.time }}</strong>
+              <strong>{{ item.time }} 秒</strong>
             </v-col>
             <v-col>
               <strong>{{ item.context }}</strong>
-              <div class="text-caption">
-                Mobile App
-              </div>
+              <v-col v-for="tool in item.tools">
+                <v-icon>mdi-{{ tool }}</v-icon> &nbsp; {{ tool }}
+              </v-col>
             </v-col>
           </v-row>
         </v-timeline-item>
@@ -101,9 +102,14 @@ export default {
     time: sessionStorage.getItem('time')
   }),
 
+  computed: {
+    time_min: function () {
+      return Math.round(this.time/60)
+    }
+  },
 
   async created () {
-    console.log(this.procedure)
+
   }
 };
 </script>
