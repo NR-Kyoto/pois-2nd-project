@@ -91,13 +91,14 @@ export default {
       //console.log(this.dish_list)
 
       // デバッグ用：レシピIDリストを表示
+      //const recipeIds = this.dish_list.map((dish) => dish.dish_id);
       //const recipeIds = this.recipes["recipes"];
       //const recipeIds = [1,2]
 
       //ここでレシピIDリストを作成してAPIに送信する
       //const recipeIds = this.dish_list.map((dish) => dish.dish_id);
       //const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", recipeIds, config);
-      //this.recommendedRecipes = recommendResponse.data;
+      this.recommendedRecipes = this.dish_list;
 
       //const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", recipeIds, config);
       //Vue.set(this, 'recommendedRecipes', recommendResponse.data.dish_list);
