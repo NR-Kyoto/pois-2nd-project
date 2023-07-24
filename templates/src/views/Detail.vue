@@ -41,13 +41,13 @@
           color="pink"
           small
         >
+          <template>{{ dish_names[item.dish_index-1] }}</template>
           <v-row class="pt-1">
             <v-col cols="3">
               <strong>{{ item.time }} 秒</strong>
             </v-col>
             <v-col>
               <p><strong>{{ item.context }}</strong></p>
-              <li v-if="item.dish_index">{{ dish_names[item.dish_index-1] }}</li>
               <v-col v-for="tool in item.tools">
                 <v-icon>mdi-{{ tool }}</v-icon> &nbsp; {{ tool }}
               </v-col>
