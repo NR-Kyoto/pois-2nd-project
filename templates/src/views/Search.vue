@@ -86,27 +86,24 @@ export default {
         headers: { Authorization: `Bearer ${token}` },
         };
       const response = await axios.get("http://localhost:8000/recipe/getRecipe/", config);
-      // console.log(response.data);
+      //console.log(response.data);
       this.dish_list = response.data.dish_list;
-      console.log(this.dish_list)
-      //console.log(this.dish_list[0]); // 0番目の要素を表示して`dish_id`が含まれているか確認
-      //console.log(this.dish_list[1]); // 1番目の要素を表示して`dish_id`が含まれているか確認
+      //console.log(this.dish_list)
 
       // デバッグ用：レシピIDリストを表示
-      //const recipeIds = this.dish_list.map((dish) => dish.dish_id);
-      const recipeIds = [1,2]
-      //console.log("recipeIds:", recipeIds);
+      //const recipeIds = this.recipes["recipes"];
+      //const recipeIds = [1,2]
 
       //ここでレシピIDリストを作成してAPIに送信する
       //const recipeIds = this.dish_list.map((dish) => dish.dish_id);
       //const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", recipeIds, config);
       //this.recommendedRecipes = recommendResponse.data;
 
-      const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", recipeIds, config);
-      this.recommendedRecipes = recommendResponse.data.dish_list;
+      //const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", recipeIds, config);
+      //Vue.set(this, 'recommendedRecipes', recommendResponse.data.dish_list);
 
       // デバッグ用：おすすめレシピを表示
-      console.log("recommendedRecipes:", this.recommendedRecipes);
+      //console.log("recommendedRecipes:", this.recommendedRecipes);
 
     } catch(error) {
       console.error(error)
@@ -127,14 +124,30 @@ export default {
       this.$router.push('/detail')
     },
 
-    hold(input){
+    async hold(input){
       this.dish_name_set.push(input);
       this.recipes["recipes"].push(input.dish_id);
+      try {
+      // `this.recipes["recipes"]`をそのままレシピIDリストとしてAPIに送信する
+      const config = {
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("access")}` },
+      };
+      const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", this.recipes["recipes"], config);
+      this.recommendedRecipes = recommendResponse.data.dish_list;
+
+      // デバッグ用：おすすめレシピを表示
+      console.log("recommendedRecipes:", this.recommendedRecipes);
+
+    } catch (error) {
+      console.error(error);
+    }
+      //Vue.set(this, 'recommendedRecipes', this.recommendedRecipes.concat(input.recipeIds));
     },
 
     deleteCheck(i) {
       this.dish_name_set.splice(i, 1);
       this.recipes["recipes"].splice(i, 1);
+      //Vue.set(this, 'recommendedRecipes', this.recommendedRecipes.filter(recipe => !this.recipes["recipes"].includes(recipe.dish_id)));
     }
   },
 };
