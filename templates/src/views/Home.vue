@@ -133,7 +133,7 @@ export default {
       this.detail_dish_names = value.data.dish_names;
       this.detail_procedure = value.data.procedure;
       this.detail_ingredient = value.data.ingredient;
-      this.detail_all_time = value.data.time; 
+      this.detail_all_time = value.data.time;
       sessionStorage.setItem('dish_names', this.detail_dish_names);
       sessionStorage.setItem('procedure', JSON.stringify(this.detail_procedure));
       sessionStorage.setItem('ingredient', JSON.stringify(this.detail_ingredient));
