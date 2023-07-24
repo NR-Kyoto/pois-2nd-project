@@ -185,7 +185,7 @@ export default {
       const response2 = await axios.get("http://localhost:8000/recipe/show_menu_history", config)
       this.menu_history = JSON.parse(response2.data)
       
-      for (let i = 0; i < this.menu_history.length; i++) {
+      for (let i = 0; i < 6; i++) {
         let ids = []
         for (let j = 0; j < this.menu_history[i].dish_names.length; j++) {
           let response3 = await axios.post("http://localhost:8000/recipe/search_dish/", {search_str: this.menu_history[i].dish_names[j]}, config)
