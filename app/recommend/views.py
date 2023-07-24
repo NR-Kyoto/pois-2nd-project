@@ -22,7 +22,7 @@ def recommend_recipe(request) -> HttpResponse:
 
 class RecommendRecipe(APIView):
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         body = json.loads(request.body)
         recommend_recipe_list = make_recommend_list(body)
         host_url = get_host_url(request)
