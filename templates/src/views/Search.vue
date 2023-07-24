@@ -7,25 +7,25 @@
     <v-row>
       <v-col v-for="item in recommendedRecipes" :key="item.dish_id" cols="12" lg="4" md="6">
         <v-hover
-          v-slot:default="{ hover }"
-          close-delay="50"
-          open-delay="50"
+            v-slot:default="{ hover }"
+            close-delay="50"
+            open-delay="50"
         >
           <div>
             <v-card
-              :color="hover ? 'white' : 'transparent'"
-              :elevation="hover ? 12 : 0"
-              flat
-              hover
-              to=""
+                :color="hover ? 'white' : 'transparent'"
+                :elevation="hover ? 12 : 0"
+                flat
+                hover
+                to=""
             >
               <v-img
-                :aspect-ratio="16 / 9"
-                class="elevation-2"
-                gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                height="200px"
-                :src="`http://localhost:8000/${item.dish_image}`"
-                style="border-radius: 16px"
+                  :aspect-ratio="16 / 9"
+                  class="elevation-2"
+                  gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                  height="200px"
+                  :src="`http://localhost:8000/${item.dish_image}`"
+                  style="border-radius: 16px"
               >
                 <v-card-text>
                   <v-btn color="secondary" to="category">More</v-btn>
@@ -34,7 +34,7 @@
 
               <v-card-text>
                 <div class="text-h5 font-weight-bold primary--text">
-                  {{ item.dish_name }}
+                {{ item.dish_name }}
                 </div>
 
                 <div class="text-body-1 py-4">
@@ -86,15 +86,16 @@ export default {
         headers: { Authorization: `Bearer ${token}` },
         };
       const response = await axios.get("http://localhost:8000/recipe/getRecipe/", config);
-      console.log(response.data);
+      // console.log(response.data);
       this.dish_list = response.data.dish_list;
       console.log(this.dish_list)
-      console.log(this.dish_list[0]); // 0番目の要素を表示して`dish_id`が含まれているか確認
-      console.log(this.dish_list[1]); // 1番目の要素を表示して`dish_id`が含まれているか確認
+      //console.log(this.dish_list[0]); // 0番目の要素を表示して`dish_id`が含まれているか確認
+      //console.log(this.dish_list[1]); // 1番目の要素を表示して`dish_id`が含まれているか確認
 
       // デバッグ用：レシピIDリストを表示
-      const recipeIds = this.dish_list.map((dish) => dish.dish_id);
-      console.log("recipeIds:", recipeIds);
+      //const recipeIds = this.dish_list.map((dish) => dish.dish_id);
+      const recipeIds = [1,2]
+      //console.log("recipeIds:", recipeIds);
 
       //ここでレシピIDリストを作成してAPIに送信する
       //const recipeIds = this.dish_list.map((dish) => dish.dish_id);
@@ -102,7 +103,7 @@ export default {
       //this.recommendedRecipes = recommendResponse.data;
 
       const recommendResponse = await axios.post("http://localhost:8000/recommend/recommend_recipe/", recipeIds, config);
-      this.recommendedRecipes = recommendResponse.data;
+      this.recommendedRecipes = recommendResponse.data.dish_list;
 
       // デバッグ用：おすすめレシピを表示
       console.log("recommendedRecipes:", this.recommendedRecipes);
