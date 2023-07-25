@@ -310,7 +310,7 @@ class Schedule:
                     result.append({
                         "dish_index": task.dish_id,
                         "context": "その間に，" + task.context,
-                        "tools": task.resources,
+                        "tools": [re.findall('[a-z]+', tool)[0] for tool in task.resources],
                         "time": task.time
                     })
                     
@@ -319,7 +319,7 @@ class Schedule:
                     result.append({
                         "dish_index": task.dish_id,
                         "context": task.context,
-                        "tools": task.resources,
+                        "tools": [re.findall('[a-z]+', tool)[0] for tool in task.resources],
                         "time": task.time
                     })
 

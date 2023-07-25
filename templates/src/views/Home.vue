@@ -59,9 +59,6 @@
                           :src="`http://localhost:8000/${item.dish_image}`"
                           style="border-radius: 16px"
                       >
-                        <v-card-text>
-                          <v-btn color="secondary" to="category">More</v-btn>
-                        </v-card-text>
                       </v-img>
 
                       <v-card-text>

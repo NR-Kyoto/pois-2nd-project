@@ -27,9 +27,6 @@
                   :src="`http://localhost:8000/${item.dish_image}`"
                   style="border-radius: 16px"
               >
-                <v-card-text>
-                  <v-btn color="secondary" to="category">More</v-btn>
-                </v-card-text>
               </v-img>
 
               <v-card-text>
@@ -145,9 +142,23 @@ export default {
       //Vue.set(this, 'recommendedRecipes', this.recommendedRecipes.concat(input.recipeIds));
     },
 
-    deleteCheck(i) {
+    async deleteCheck(i) {
       this.dish_name_set.splice(i, 1);
       this.recipes["recipes"].splice(i, 1);
+
+      const config = {
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("access")}` },
+      };
+      let response;
+      if (this.recipes["recipes"].length == 0) {
+        response = await axios.get("http://localhost:8000/recipe/getRecipe/", config);
+      } else {
+        response = await axios.post("http://localhost:8000/recommend/recommend_recipe/", this.recipes["recipes"], config);
+      }
+
+      this.recommendedRecipes = response.data.dish_list;
+
+
       //Vue.set(this, 'recommendedRecipes', this.recommendedRecipes.filter(recipe => !this.recipes["recipes"].includes(recipe.dish_id)));
     }
   },
