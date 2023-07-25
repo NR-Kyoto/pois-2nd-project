@@ -15,6 +15,7 @@
                 outlined
             ></v-text-field>
             <v-text-field
+                type="password"
                 v-model="password"
                 label="Password"
                 outlined
@@ -49,11 +50,11 @@ export default {
           password: this.password,
         });
 
-        sessionStorage.setItem('access', response.data.access);
+        window.sessionStorage.setItem('access', response.data.access);
         sessionStorage.setItem('refresh', response.data.refresh);
         sessionStorage.setItem('username', this.username)
 
-        await this.$router.push('/');
+        window.location.href = "/";
       } catch (error) {
         console.error('Login failed.');
         console.error(error.response.data);

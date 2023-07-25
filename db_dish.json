@@ -499,7 +499,7 @@
                         "time": 300,
                         "condition": ["udon2"],
                         "previous": "udon2",
-                        "text": "香りが立ったら牛こま切れ肉を加え、炒めます。色が変わってきたら酒、砂糖、みりん、醤油を加え、肉に火が通ったら火から下ろします。"
+                        "text": "香りが立ったら牛こま切れ肉を加え、炒めます。色が変わってきたら酒，砂糖，みりん，醤油を大さじ1ごと加え、肉に火が通ったら火から下ろします。"
                     },
                     {
                         "id": "udon4",
@@ -508,25 +508,16 @@
                         "time": 180,
                         "condition": null,
                         "previous": null,
-                        "text": "鍋に水、顆粒だし、醤油、みりんを混ぜ合わせ、中火にかけ沸騰させます。"
+                        "text": "鍋に水，顆粒だし，醤油の材料を加え混ぜ合わせ、中火にかけ沸騰させます。うどんを入れ、パッケージの表記通りにゆでます。"
                     },
                     {
                         "id": "udon5",
                         "ingredient": "vegetable",
-                        "method": "stew",
+                        "method": "stir",
                         "time": 180,
-                        "condition": ["udon4"],
-                        "previous": "udon4",
-                        "text": "うどんを入れ、2分間ゆでます。"
-                    },
-                    {
-                        "id": "udon6",
-                        "ingredient": "seasoning",
-                        "method": "stew",
-                        "time": 60,
-                        "condition": ["udon3", "udon5"],
-                        "previous": "udon5",
-                        "text": "うどんを器に移し、肉を上に盛り付けます。"
+                        "condition": ["udon3", "udon4"],
+                        "previous": null,
+                        "text": "器に盛り付け、炒めた牛こまを乗せたら完成です．"
                     }
                 ]
             }

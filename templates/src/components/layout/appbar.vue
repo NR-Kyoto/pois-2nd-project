@@ -59,9 +59,9 @@
                 style="cursor: pointer"
                 @click="$router.push('/')"
             >
-              <v-icon color="primary" large>mdi-feather</v-icon>
-              App
-              <span class="accent--text">Title</span>
+              <v-icon color="primary" large>mdi-pot-steam-outline</v-icon>
+              Cook
+              <span class="accent--text">SKD</span>
             </v-toolbar-title>
           </v-col>
 
@@ -139,11 +139,29 @@ export default {
       }
     ],
   }),
-
+  // computed: {
+  //   iconActive() {
+  //     return sessionStorage.access;
+  //   },
+  //   username() {
+  //     return sessionStorage.username;
+  //   }
+  // },
   created() {
     this.username = sessionStorage.getItem('username');
     this.iconActive = sessionStorage.getItem('access');
+
+    window.addEventListener('storage', this.handleStorageChange);
   },
-  
+  beforeDestroy() {
+    window.removeEventListener('storage', this.handleStorageChange);
+  },
+  methods: {
+    handleStorageChange(event) {
+      if (event.key === 'access') {
+        this.$forceUpdate();
+      }
+    }
+  }
 };
 </script>

@@ -54,31 +54,31 @@ class CookingTool(models.Model):
     )
     # 包丁
     kitchen_knife = models.IntegerField(
-        default=0,
+        default=1,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     # まな板
     cutting_board = models.IntegerField(
-        default=0,
+        default=1,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     # フライパン
     flying_pan = models.IntegerField(
-        default=0,
+        default=1,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     # 鍋
     sauce_pan = models.IntegerField(
-        default=0,
+        default=1,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     # ボール
     bowl = models.IntegerField(
-        default=0,
+        default=1,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     # コンロ
     stove = models.IntegerField(
-        default=0,
+        default=1,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
